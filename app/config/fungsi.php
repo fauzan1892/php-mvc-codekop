@@ -16,3 +16,9 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
     {
         return base_url.$url;
     }
+
+    function uri_segments($segment)
+    {
+        $uriSegments = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        return $uriSegments[$segment];
+    }
