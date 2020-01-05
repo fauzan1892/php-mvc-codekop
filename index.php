@@ -15,7 +15,7 @@
  require 'app/config/crud.php';
  require 'app/config/views.php';
  require 'app/config/security.php';
- require 'app/config/fungsi.php';
+ require 'app/config/functions.php';
  require 'app/config/router.php';
  require 'app/config/autoload.php';
 
