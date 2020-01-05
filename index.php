@@ -17,10 +17,8 @@
  require 'app/config/security.php';
  require 'app/config/fungsi.php';
  require 'app/config/router.php';
- 
+ require 'app/config/autoload.php';
 
- ### helper ###
- require 'app/helper/alert.php';
 
  $crud = new prosesCrud($koneksi);
  $lihat = new CK_Views();
@@ -73,7 +71,7 @@
     }
 
 
-    $router->run();
+$router->run();
 
 
 ?>
