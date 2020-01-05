@@ -26,9 +26,10 @@
  $lihat = new CK_Views();
 
  $router = new Router($_SERVER);
-
     session_on(); 
+
     ### proses views file di app/controller/nama_file.php ###
+
     $explode_url = explode('/',$_SERVER['REQUEST_URI']);
     $explode_url = array_slice($explode_url, 2);
     if(empty($_SERVER['PATH_INFO']))
@@ -54,8 +55,14 @@
 
             if(!empty($explode_url[2]))
             {
-                $func = $explode_url[2];
-                $object->$func();
+                $get = explode('?',$explode_url[2]);
+                $func = $get[0];
+                if ((int)method_exists($class,$func) == '1') {
+                    $object->$func();
+                } else {
+                    include 'app/config/not_found.php';
+                }
+
             }else{
                 $object->index();
             }
