@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 /**
  * First, let's define our Router object.
  */
@@ -39,7 +40,7 @@ class Router
      * @param string   $uri
      * @param Callable $fn
      */
-    public function addRoute(string $uri, \Closure $fn) : void
+    public function add_route(string $uri, \Closure $fn) : void
     {
         $this->routes[$uri] = $fn;
     }

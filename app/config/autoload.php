@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 
 // helper required file $helpers = array('alert','fungsi','url'); any more in app/helper/
 $helpers = array('alert');
