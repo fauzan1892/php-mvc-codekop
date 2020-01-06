@@ -1,9 +1,9 @@
 <?php
 /**
- * Penulis : fauzan1892  
- * E-mail  : fauzan1892@codekop.com
- * 
- * website : https://codekop.com/
+ * Penulis  : fauzan1892  
+ * E-mail   : fauzan1892@codekop.com
+ * Projects : Codekop PHP Framework MVC ( Bingkai Kerja Website )
+ * website  : https://codekop.com/
  * 
  * 
  * 
@@ -24,8 +24,6 @@
  $lihat = new CK_Views();
 
  $router = new Router($_SERVER);
-    session_on(); 
-
     ### proses views file di app/controller/nama_file.php ###
 
     $explode_url = explode('/',$_SERVER['REQUEST_URI']);
@@ -45,16 +43,16 @@
 
     }else{
         
-        if(file_exists('app/controller/'.$explode_url[1].'.php'))
+        if(file_exists('app/controller/'.url_disallowed($explode_url[1]).'.php'))
         {
-            include 'app/controller/'.$explode_url[1].'.php';
-            $class = $explode_url[1];
+            include 'app/controller/'.url_disallowed($explode_url[1]).'.php';
+            $class = url_disallowed($explode_url[1]);
             $object = new $class($lihat,$koneksi);
 
-            if(!empty($explode_url[2]))
+            if(!empty(url_disallowed($explode_url[2])))
             {
                 $get = explode('?',$explode_url[2]);
-                $func = $get[0];
+                $func = url_disallowed($get[0]);
                 if ((int)method_exists($class,$func) == '1') {
                     $object->$func();
                 } else {
