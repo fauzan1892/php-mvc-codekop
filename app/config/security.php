@@ -7,15 +7,20 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
  * 
  */
 
+    function url_disallowed($param) {
+        return preg_replace("/[^a-zA-Z0-9.]/", '', "{$param}");
+    }
+
     function param_get($get)
     {
-        return strip_tags($_GET[$get]);
+        return preg_replace("/[^a-zA-Z0-9.]/", '', "{$_GET[''.$get.'']}");
     }
 
     function param_post($post)
     {
-        return strip_tags($_POST[$post]);
+        return preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST[''.$post.'']}");
     }
+
 
 /**
  * 
