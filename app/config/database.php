@@ -2,7 +2,7 @@
     defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 
     $dbhost = 'localhost'; // host your server
-    $dbname = 'tugas_apk_search_job'; // your database name
+    $dbname = ''; // your database name
     $dbuser = 'root'; // user your server
     $dbpass = '';  // pass your server
     $dbcharset = 'utf8'; // default   
@@ -25,6 +25,8 @@
 
         $koneksi = $dbConnection;
         
+    }else{
+        $koneksi = null;
     }
 
 ?>
