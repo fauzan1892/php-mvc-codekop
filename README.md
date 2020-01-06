@@ -14,6 +14,8 @@ setting database : app/config/database.php
     $dbcharset = 'utf8'; // default  
 
 create controller in codekop framework on app/controller
+
+
 create helper in codekop framework on app/helper and setting helper in app/config/autoload.php :
 
    $helpers = array('alert');
