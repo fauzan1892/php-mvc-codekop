@@ -83,7 +83,7 @@
 		<p>Dokumentasi cara penggunaannya nanti dulu ya pantengin aja <a href="https://www.codekop.com/">Codekop.com</a>.</p>
 	</div>
 
-	<p class="footer">Page rendered in <strong><span id="render_page"></span></strong> seconds. Codekop Framework Version <strong>1.0</strong></p>
+	<p class="footer">Page rendered in <strong><?= page_rendered();?></strong> seconds. Codekop Framework Version <strong>1.0</strong></p>
 </div>
 </body>
 </html>
