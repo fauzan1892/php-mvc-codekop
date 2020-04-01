@@ -18,6 +18,6 @@ create controller in codekop framework on app/controller
 
 create helper in codekop framework on app/helper and setting helper on app/config/autoload.php :
 
-   $helpers = array('alert');
+   <pre>$helpers = array('alert');</pre>
 
 
