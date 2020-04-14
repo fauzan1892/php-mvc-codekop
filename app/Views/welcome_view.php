@@ -70,7 +70,6 @@
 	</style>
 </head>
 <body>
-
 <div id="container">
 	<h1>Selamat datang di Codekop PHP MVC</h1>
 
