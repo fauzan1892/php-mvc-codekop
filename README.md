@@ -1,5 +1,5 @@
 # Codekop PHP MVC Version 1.0 ( Beta )
- open web project using php mvc frameworks from Codekop 
+is a simple open web project using php mvc frameworks from Codekop 
 
 # Starter Apps :
 setting base url and default controller on index : app/Config/Config.php
