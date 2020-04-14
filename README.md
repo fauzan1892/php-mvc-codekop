@@ -1,23 +1,27 @@
-# codekopv1
-Codekop PHP Framework MVC
-setting base url and default controller on index : app/config/config.php
+# Codekop PHP MVC Versi 1.0
+ open web project using php mvc from Codekop 
 
-    define('base_url',"http://".$_SERVER['HTTP_HOST'].preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/'); 
-    define('default_view','welcome');
+# Starter Apps :
+setting base url and default controller on index : app/Config/Config.php
 
-setting database : app/config/database.php
+<pre>
+define('base_url',"http://".$_SERVER['HTTP_HOST'].preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/'); 
+define('default_view','Home');
+</pre>
 
+setting database : app/Config/Database.php
+
+<pre>
+<?php
     $dbhost = 'localhost'; // host your server
     $dbname = ''; // your database name
     $dbuser = 'root'; // user your server
     $dbpass = '';  // pass your server
     $dbcharset = 'utf8'; // default  
+</pre>
 
-create controller in codekop framework on app/controller
+# Controllers
+create controller in codekop framework on app/Controllers
 
-
-create helper in codekop framework on app/helper and setting helper on app/config/autoload.php :
-
-   <pre>$helpers = array('alert');</pre>
 
 
