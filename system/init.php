@@ -1,5 +1,4 @@
 <?php
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
     require_once 'app/Config/Config.php';
 
     require_once 'Controller.php';
