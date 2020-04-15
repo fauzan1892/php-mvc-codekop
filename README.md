@@ -16,7 +16,6 @@ setting database : app/Config/Database.php
     $dbname = ''; // your database name
     $dbuser = 'root'; // user your server
     $dbpass = '';  // pass your server
-    $dbcharset = 'utf8'; // default  
 </pre>
 
 # Controllers
