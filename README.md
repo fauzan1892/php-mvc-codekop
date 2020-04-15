@@ -12,10 +12,10 @@ define('default_view','Home');
 setting database : app/Config/Database.php
 
 <pre>
-    $dbhost = 'localhost'; // host your server
-    $dbname = ''; // your database name
-    $dbuser = 'root'; // user your server
-    $dbpass = '';  // pass your server
+    $dbhost_ = 'localhost'; // host your server
+    $dbname_ = ''; // your database name
+    $dbuser_ = 'root'; // user your server
+    $dbpass_ = '';  // pass your server
 </pre>
 
 # Controllers
