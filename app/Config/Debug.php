@@ -7,8 +7,9 @@
   |
  */
 
-    echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
-    background:#e32b4a;color:#fff;font-size:16px; }</style>';
+    echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;
+            padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
+            background:#e32b4a;color:#fff;font-size:16px; }</style>';
 
     $debug_handler = 'testing';
 

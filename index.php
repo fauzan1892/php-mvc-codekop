@@ -1,13 +1,24 @@
 <?php
-/**
- * Penulis  : fauzan1892  
- * E-mail   : fauzan1892@codekop.com
- * Projects : Codekop PHP MVC 
- * website  : https://codekop.com/
- * 
- * 
- * 
- * 
+/*
+  |--------------------------------------------------------------------------
+  | Codekop PHP MVC Frameworks
+  |--------------------------------------------------------------------------
+  | is a simple open web project using php mvc frameworks 
+  | simple php mvc made for the purpose of learning and new things about php 
+  | with php mvc concept.
+  | 
+  | @package   : php-mvc-codekop
+  | @author    : Codekop Dev Team
+  | @copyright : Copyright (c) 2019-2020 Codekop.com (https://www.codekop.com)
+  |
+  | free for everyone to development a simple open web project using php mvc 
+  | recommended php version for running is 7.0 but is run for php 5.6+
+  | 
  */
 
-require_once 'system/init.php';
+if(phpversion() >= '5.6')
+{
+    require_once 'system/init.php';
+}else{
+    echo 'Minimum php version for running is 5.6+, and Your php version is '.phpversion();
+}

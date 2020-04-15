@@ -5,15 +5,15 @@ class Database {
 
     public function __construct()
     {
-        global $dbhost;
-        global $dbname;
-        global $dbuser;
-        global $dbpass;
+        global $dbhost_;
+        global $dbname_;
+        global $dbuser_;
+        global $dbpass_;
 
-        $this->host = $dbhost;
-        $this->name = $dbname;
-        $this->user = $dbuser;
-        $this->pass = $dbpass;
+        $this->host = $dbhost_;
+        $this->name = $dbname_;
+        $this->user = $dbuser_;
+        $this->pass = $dbpass_;
 
         if($this->name !== '')
         {

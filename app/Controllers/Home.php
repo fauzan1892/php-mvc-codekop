@@ -9,8 +9,4 @@ class Home extends Controller {
         $this->show->view('welcome_view', $data);
     }
 
-    public function lihat()
-    {
-        echo 'sukses';
-    }
 }

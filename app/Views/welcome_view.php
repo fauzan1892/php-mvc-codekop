@@ -82,7 +82,7 @@
 		<p>Dokumentasi cara penggunaannya nanti dulu ya pantengin aja <a href="https://www.codekop.com/">Codekop.com</a>.</p>
 	</div>
 
-	<p class="footer">Codekop PHP MVC Version <strong>1.0</strong></p>
+	<p class="footer">Page Rendered in <?=page_rendered();?>s - Codekop PHP MVC Version <strong>1.0</strong></p>
 </div>
 </body>
 </html>

@@ -1,7 +1,9 @@
 <?php
     require_once 'app/Config/Config.php';
     require_once 'app/Config/Debug.php';
+    require_once 'app/Config/Autoload.php';
     require_once 'Function.php';
+    require_once 'Session.php';
 
     require_once 'Controller.php';
     require_once 'App.php';
@@ -11,6 +13,6 @@
     require_once 'app/Config/Database.php';
     require_once 'Database.php';
 
-    $app = new App(default_view);
+    $app = new App(default_controller);
 
 ?>

@@ -1,8 +1,11 @@
 <?php
-/**
- * 
- * Load module
- * 
+/*
+  |--------------------------------------------------------------------------
+  | App Load Controllers from url
+  |--------------------------------------------------------------------------
+  | 
+  | note : can't be scandir for the controler in a new folder on app/Controllers
+  |
  */
 defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 
@@ -15,7 +18,8 @@ class App{
 
         $explode_url = explode('/',$_SERVER['REQUEST_URI']);
         $explode_url = array_slice($explode_url, 2);
-        // include controller default
+        
+        /*--  include controller default from app/Config/Config.php --*/
         if(empty($explode_url[1]))
         {
             if(file_exists('app/Controllers/'.$controller.'.php'))
@@ -51,10 +55,6 @@ class App{
             }else{
                 include 'app/Views/errors/not_found.php';
             }
-
         }
-        
-
-        
     }
 }
