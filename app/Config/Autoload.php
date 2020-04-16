@@ -26,3 +26,18 @@ foreach ($helpers as $helper)
         include 'app/helper/'.$helper.'.php'; 
     }
 } 
+
+/*
+  |--------------------------------------------------------------------------
+  | Model Settings
+  |--------------------------------------------------------------------------
+  | if your create new class function for help your project,  for the solution about 
+  | this your recommended for using with Model and fill
+  | your file Model in the $models =  array();
+  |
+  | examples = $models =  array('Admin_model');
+  | in Admin_model on array() was taken in the folder app/Models/Admin_model.php
+  |
+ */
+
+$models = array('');
