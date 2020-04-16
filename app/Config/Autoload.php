@@ -41,3 +41,15 @@ foreach ($helpers as $helper)
  */
 
 $models = array('');
+
+// for models foreach included
+foreach ($models as $model)
+{ 
+    if($model == null)
+    {
+
+    }else{
+        include 'app/Models/'.$model.'.php'; 
+        $object = new $model();
+    }
+} 

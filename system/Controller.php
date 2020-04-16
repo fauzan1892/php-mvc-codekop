@@ -12,5 +12,10 @@ class Controller{
         $this->crud = new Crud($this->db);
     }
 
+    public function model($model)
+    {
+        require_once 'app/Models/' . $model . '.php';
+        return new $model;
+    }
 
 }

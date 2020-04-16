@@ -7,7 +7,6 @@
     require_once 'Input.php';
     
     require_once 'Controller.php';
-    require_once 'app/Config/Models.php';
     require_once 'App.php';
     require_once 'Views.php';
     require_once 'Crud.php';
