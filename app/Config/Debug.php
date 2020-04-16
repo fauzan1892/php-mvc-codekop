@@ -70,17 +70,7 @@
                     echo '</div><br/>';
             }
         }
-        function log_exception( Exception $e )
-        {
-            $message = "Type: " . get_class( $e ) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()};";
-            echo '<div class="database_erroryzx">';
-            echo $message;
-            echo '</div><br/>';
-        }
         set_error_handler("errorHandler");
-        set_exception_handler( "log_exception" );
-        
-        
 
     }else if($debug_handler == 'production'){
         error_reporting(0);

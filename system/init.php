@@ -4,6 +4,7 @@
     require_once 'app/Config/Autoload.php';
     require_once 'Function.php';
     require_once 'Session.php';
+    require_once 'Input.php';
 
     require_once 'Controller.php';
     require_once 'App.php';

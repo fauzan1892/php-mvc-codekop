@@ -7,6 +7,8 @@ class Controller{
     {
         $this->db   = new Database;
         $this->show = new Views;
+        $this->session = new Session;
+        $this->input = new Input;
         $this->crud = new Crud($this->db);
     }
 
