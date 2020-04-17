@@ -1,11 +1,11 @@
 <?php
-/**
- * 
- * Load module
- * 
- */
 defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
-
+/*
+  |--------------------------------------------------------------------------
+  | Views Settings
+  |--------------------------------------------------------------------------
+  |
+ */
 class Views{
 
     // untuk include 

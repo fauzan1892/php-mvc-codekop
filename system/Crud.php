@@ -1,10 +1,11 @@
 <?php
 defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
-/**
- * 
- * berisi tentang fungsi-fungsi crud
+/*
+  |--------------------------------------------------------------------------
+  | Crud Settings
+  |--------------------------------------------------------------------------
+  |
  */
-
 class Crud {
 
     protected $db;

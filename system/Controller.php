@@ -1,5 +1,11 @@
 <?php
 defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
+/*
+  |--------------------------------------------------------------------------
+  | Controller Settings
+  |--------------------------------------------------------------------------
+  |
+ */
 
 class Controller{
 

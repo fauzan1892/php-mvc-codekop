@@ -1,5 +1,12 @@
 <?php
 defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !'); 
+/*
+  |--------------------------------------------------------------------------
+  | Input method Settings ( Get & Post )
+  |--------------------------------------------------------------------------
+  |
+ */
+
 class Input {
 
     public function getPost($name, $t)
