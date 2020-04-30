@@ -6,13 +6,8 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
   |--------------------------------------------------------------------------
   |
  */
-class Crud {
-
-    protected $db;
-    function __construct($db){
-        $this->db = $db;
-    }
-
+class Crud extends Database
+{
     // merupakan fungsi untuk melihat tabel dari database ( select * from )
     function get($tabel)
     {
@@ -20,10 +15,12 @@ class Crud {
     }
 
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
-    function get_where($tabel,$where,$id)
+    function get_where($tabel,$where)
     {
-        $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where = ?");
-        $row->execute(array($id));
+        $key = array_keys($paramsArr);
+        $val = array_values($paramsArr);
+        $row = $this->db->prepare("SELECT * FROM $tabel WHERE " . implode('=?, ', $key) . "=?");
+        $row->execute($val);
         return $row;
     }
 
