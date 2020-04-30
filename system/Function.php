@@ -24,8 +24,14 @@
 
    function getSegments($segment)
    {
+      $explode_url = explode('/',$_SERVER['REQUEST_URI']);
+      $rowurl = count(explode('/',base_url));
+      $row_url = count(parse_url(base_url));
+      $urlc = $rowurl-$row_url;
+      $rurl = $urlc-1;
+      $cont = $segment + $rurl;
       $uriSegments = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-      return $uriSegments[$segment];
+      return $uriSegments[$cont];
    }
 
    function page_rendered()
