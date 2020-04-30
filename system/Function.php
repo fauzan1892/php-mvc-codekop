@@ -19,7 +19,7 @@
 
    function base_url($url)
    {
-      return default_controller.$url;
+      return base_url.$url;
    }
 
    function getSegments($segment)
