@@ -19,7 +19,15 @@ class Crud extends Database
     {
         $key = array_keys($where);
         $val = array_values($where);
-        $row = $this->db->prepare("SELECT * FROM $tabel WHERE " . implode('=?, ', $key) . "=?");
+
+        if(count($key) > 0)
+        {
+            $where = implode('=? AND ', $key).'=?';
+        }else{
+            $where = implode('=? ', $key);
+        }
+
+        $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where");
         $row->execute($val);
         return $row;
     }
