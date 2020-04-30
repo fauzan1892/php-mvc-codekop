@@ -17,8 +17,8 @@ class Crud extends Database
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
     function get_where($tabel,$where)
     {
-        $key = array_keys($paramsArr);
-        $val = array_values($paramsArr);
+        $key = array_keys($where);
+        $val = array_values($where);
         $row = $this->db->prepare("SELECT * FROM $tabel WHERE " . implode('=?, ', $key) . "=?");
         $row->execute($val);
         return $row;
