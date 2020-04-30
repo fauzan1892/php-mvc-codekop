@@ -11,11 +11,12 @@ class Controller{
 
     function __construct()
     {
-        $this->db   = new Database;
+        $db  = new Database;
+        $this->db = $db->connect();
         $this->show = new Views;
         $this->session = new Session;
         $this->input = new Input;
-        $this->crud = new Crud($this->db);
+        $this->crud = new Crud;
     }
 
     public function model($model)
