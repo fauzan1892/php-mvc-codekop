@@ -12,32 +12,48 @@ class Session {
     public function __construct()
     {
         $default = 'codekop_session';
-        if(!empty($_SESSION)){ session_start(); }else{ }
         $this->ses_default = $default;
     }
 
-    public function set_userdata($name)
+    public function session_on()
     {
-       return $_SESSION[$this->ses_default][$name];
+        return session_start();
+    }
+
+    public function ses_destroy()
+    {
+        return session_destroy();
+    }
+
+    public function set_userdata($name,$value)
+    {
+       return $_SESSION[$name] = $value;
     }
 
     public function userdata($name)
     {
-        echo $_SESSION[$this->ses_default][$name];
+        return $_SESSION[$name];
     }
 
-    public function set_flash($type,$msg)
+    public static function set_flashdata($pesan, $aksi, $tipe)
     {
-        return $_SESSION["flash"] = [
-            "type" => $type, 
-            "message" => $msg
+        $_SESSION['flash'] = [
+            'pesan' => $pesan,
+            'aksi'  => $aksi,
+            'tipe'  => $tipe
         ];
-
     }
 
-    public function flash($type)
+    public static function flashdata()
     {
-        echo $_SESSION["flash"]["type"].' '.$_SESSION['flash']['message'];
-        unset($_SESSION["flash"]);
+        if( isset($_SESSION['flash']) ) {
+            echo '<div class="alert alert-' . $_SESSION['flash']['tipe'] . ' alert-dismissible fade show" role="alert">
+                    Data Mahasiswa <strong>' . $_SESSION['flash']['pesan'] . '</strong> ' . $_SESSION['flash']['aksi'] . '
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>';
+            unset($_SESSION['flash']);
+        }
     }
 }
