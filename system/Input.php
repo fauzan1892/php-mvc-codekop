@@ -9,21 +9,21 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 
 class Input {
 
-    public function getPost($name, $t)
+    public function getPost($name, $t = null)
     {
         if($t == TRUE)
         {
-            return preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST[''.$name.'']}");
+            return strip_tags($_POST[''.$name.'']);
         }else{
             return $_POST[''.$name.''];
         }
     }
 
-    public function getGet($name, $t)
+    public function getGet($name, $t = null)
     {
         if($t == TRUE)
         {
-            return preg_replace("/[^a-zA-Z0-9.]/", '', "{$_GET[''.$name.'']}");
+            return strip_tags($_GET[''.$name.'']);
         }else{
             return $_GET[''.$name.''];
         }
