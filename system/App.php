@@ -15,9 +15,12 @@ class App{
 
     public function __construct($controller)
     {
-
         $explode_url = explode('/',$_SERVER['REQUEST_URI']);
-        $explode_url = array_slice($explode_url, 2);
+        $rowurl = count(explode('/',base_url));
+        $row_url = count(parse_url(base_url));
+        $urlc = $rowurl-$row_url;
+        $rurl = $urlc-1;
+        $explode_url = array_slice($explode_url, $rurl);
         
         /*--  include controller default from app/Config/Config.php --*/
         if(empty($explode_url[1]))
@@ -45,7 +48,7 @@ class App{
                     if ((int)method_exists($class,$func) == '1') {
                         $object->$func();
                     } else {
-                        include 'app/config/not_found.php';
+                        include 'app/Views/errors/not_found.php';
                     }
 
                 }else{

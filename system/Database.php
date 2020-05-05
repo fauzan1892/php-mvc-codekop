@@ -6,7 +6,8 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
   |--------------------------------------------------------------------------
   |
  */
-class Database {
+class Database
+{
 
     public function __construct()
     {
@@ -23,10 +24,10 @@ class Database {
         if($this->name !== '')
         {
             try {
-                $dbConnection = new PDO("mysql:host=$this->host;dbname=$this->name", $this->user, $this->pass);
-                $dbConnection->exec("set names utf8");
-                $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                return $dbConnection;
+                $this->db = new PDO("mysql:host=$this->host;dbname=$this->name", $this->user, $this->pass);
+                $this->db->exec("set names utf8");
+                $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                return $this->db;
             }catch (PDOException $e) {
                 echo '<div class="database_erroryzx" style="background:#f58700;">';
                 echo 'Connection failed: ' . $e->getMessage();
@@ -36,6 +37,11 @@ class Database {
         }else{
             return null;
         }
+    }
+
+    public function connect()
+    {
+        return $this->db;
     }
 }
 ?>

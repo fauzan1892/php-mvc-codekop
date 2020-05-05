@@ -17,6 +17,7 @@ class Controller{
         $this->session = new Session;
         $this->input = new Input;
         $this->crud = new Crud;
+        $this->session->session_on();
     }
 
     public function model($model)

@@ -7,7 +7,7 @@
   |
  */
 
-   function redirect($url = null )
+   function redirect($url = null)
    {
       if($url)
       {

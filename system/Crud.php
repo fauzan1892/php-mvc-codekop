@@ -9,9 +9,9 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 class Crud extends Database
 {
     // merupakan fungsi untuk melihat tabel dari database ( select * from )
-    function get($tabel)
+    function get($tabel, $order = null)
     {
-        return $this->db->query("SELECT * FROM $tabel");
+        return $this->db->query("SELECT * FROM $tabel $order");
     }
 
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
@@ -23,6 +23,24 @@ class Crud extends Database
         if(count($key) > 0)
         {
             $where = implode('=? AND ', $key).'=?';
+        }else{
+            $where = implode('=? ', $key);
+        }
+
+        $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where");
+        $row->execute($val);
+        return $row;
+    }
+
+    // merupakan fungsi untuk melihat data table dari database berdasarkan id
+    function get_where_or($tabel,$where)
+    {
+        $key = array_keys($where);
+        $val = array_values($where);
+
+        if(count($key) > 0)
+        {
+            $where = implode('=? OR ', $key).'=?';
         }else{
             $where = implode('=? ', $key);
         }
