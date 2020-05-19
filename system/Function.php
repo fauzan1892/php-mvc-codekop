@@ -11,9 +11,11 @@
    {
       if($url)
       {
-         return header('Location:'.$url);
+         // return header('Location:'.$url);
+         echo '<script>window.location="'.$url.'";</script>';
       }else{
-         return header('Location:'.base_url);
+         // return header('Location:'.base_url);
+         echo '<script>window.location="'.base_url.'";</script>';
       }
    }
 
