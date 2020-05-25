@@ -24,11 +24,11 @@ create controller in codekop framework on app/Controllers
 
 # Contributors
 
-<a href="https://github.com/fauzan1892"> fauzan1892 Github</a>
+<a href="https://github.com/fauzan1892" target="_blank"> fauzan1892 Github</a>
 <br/>
-<a href="https://fauzan.codekop.com/"> Fauzan Portfolio Website</a>
+<a href="https://fauzan.codekop.com/" target="_blank"> Fauzan Portfolio Website</a>
 <br/>
-<a href="https://www.codekop.com/"> Codekop.com</a>
+<a href="https://www.codekop.com/" target="_blank"> Codekop.com</a>
 
 
 
