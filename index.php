@@ -18,7 +18,6 @@
 
 if(phpversion() >= '5.6')
 {
-    error_reporting(0); // debug php dalam tahap pengembangan
     require_once 'system/init.php';
 }else{
     echo 'Minimum php version for running is 5.6+, and Your php version is '.phpversion();

@@ -7,10 +7,7 @@
   |
  */
 
-    echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;
-            padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
-            background:#e32b4a;color:#fff;font-size:16px; }</style>';
-
+    
     $debug_handler = 'testing';
 
     if($debug_handler == 'testing' || $debug_handler == 'development')
@@ -21,6 +18,12 @@
                 // This error code is not included in error_reporting, so let it fall
                 // through to the standard PHP error handler
                 return false;
+            }else{
+                
+                echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;
+                    padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
+                    background:#e32b4a;color:#fff;font-size:16px; }</style>';
+        
             }
 
             switch ($errno) {
@@ -60,8 +63,8 @@
                 case E_COMPILE_ERROR:
                 case E_USER_ERROR:
                     echo '<div class="database_erroryzx">';
-                    echo("<b>Fatal error</b> $errstr at $errfile : $errline \n");
                     echo '</div><br/>';
+                    echo("<b>Fatal error</b> $errstr at $errfile : $errline \n");
                     break;
 
                 default:
@@ -74,6 +77,18 @@
 
     }else if($debug_handler == 'production'){
         error_reporting(0);
+        if (!(error_reporting() & $errno)) {
+            // This error code is not included in error_reporting, so let it fall
+            // through to the standard PHP error handler
+            return false;
+        }else{
+            
+            echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;
+                padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
+                background:#e32b4a;color:#fff;font-size:16px; }</style>';
+    
+        }
+
         echo '<div class="database_erroryzx" style="background:#3273a8;text-align:center;font-size:24px;">';
         echo "Oops! Something went wrong! We're looking into it!";
         echo '</div><br/>';

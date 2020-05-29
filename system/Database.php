@@ -6,7 +6,8 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
   |--------------------------------------------------------------------------
   |
  */
-class Database
+
+ class Database
 {
 
     public function __construct()
@@ -41,7 +42,12 @@ class Database
 
     public function connect()
     {
-        return $this->db;
+        if($this->name !== '')
+        {
+             $this->db;
+        }else{
+            return null;
+        }
     }
 }
 ?>
