@@ -1,7 +1,7 @@
-# Codekop PHP MVC Version 1.0 ( Beta )
+## Codekop PHP MVC Version 1.0 ( Beta )
 A simple open web project using php mvc frameworks from Codekop 
 
-# Starter Apps :
+## Starter Apps :
 setting base url and default controller on index : app/Config/Config.php
 
 <pre>
@@ -18,11 +18,11 @@ setting database : app/Config/Database.php
     $dbpass_ = '';  // pass your server
 </pre>
 
-# Controllers
+## Controllers
 
 create controller in codekop framework on app/Controllers
 
-# Contributors
+## Contributors
 
 <a href="https://github.com/fauzan1892" target="_blank"> fauzan1892 Github</a>
 <br/>
