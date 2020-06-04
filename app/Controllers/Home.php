@@ -1,5 +1,7 @@
 <?php 
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+use \System\Controller;
 
 class Home extends Controller {
 

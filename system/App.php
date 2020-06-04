@@ -1,4 +1,5 @@
-<?php
+<?php namespace System;
+defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
   | App Load Controllers from url
@@ -7,7 +8,6 @@
   | note : can't be scandir for the controler in a new folder on app/Controllers
   |
  */
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 
 class App{
     
@@ -22,18 +22,28 @@ class App{
         $rurl = $urlc-1;
         $explode_url = array_slice($explode_url, $rurl);
         
+        $cx = explode('/', $controller);
+        if($cx[0] == $controller)
+        {
+            $controller_explode = explode('::', $controller);
+        }else{
+            $controller_explode = explode('::',$cx[1]);
+        }
+
         /*--  include controller default from app/Config/Config.php --*/
         if(empty($explode_url[1]))
         {
-            if(file_exists('app/Controllers/'.$controller.'.php'))
+            if(file_exists('app/Controllers/'.$controller_explode[0].'.php'))
             {
-                include 'app/Controllers/'.$controller.'.php';
-                $object = new $controller();
-                $object->index();
+                $c = $controller_explode[1];
+                include 'app/Controllers/'.$controller_explode[0].'.php';
+                $object = new $controller_explode[0];
+                $object->$c();
 
             }else{
                 include 'app/Views/errors/not_found.php';
             }
+
         }else{
             if(file_exists('app/Controllers/'.ucfirst($explode_url[1]).'.php'))
             {

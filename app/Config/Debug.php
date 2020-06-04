@@ -6,9 +6,8 @@
   |
   |
  */
-
     
-    $debug_handler = 'testing';
+    $debug_handler = 'development';
 
     if($debug_handler == 'testing' || $debug_handler == 'development')
     {

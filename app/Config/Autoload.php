@@ -1,4 +1,4 @@
-<?php
+<?php namespace Config;
 defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 /*
   |--------------------------------------------------------------------------

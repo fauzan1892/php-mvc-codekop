@@ -1,5 +1,5 @@
-<?php
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
+<?php namespace System;
+defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
   | Views Settings

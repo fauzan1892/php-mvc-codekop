@@ -1,11 +1,12 @@
-<?php
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !'); 
+<?php namespace System;
+defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
   | Session Settings
   |--------------------------------------------------------------------------
   |
  */
+use App\System;
 
 class Session {
 

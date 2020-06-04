@@ -1,12 +1,12 @@
-<?php
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
+<?php namespace System;
+defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
   | Crud Settings
   |--------------------------------------------------------------------------
   |
  */
-class Crud extends Database
+class Crud extends \System\Database
 {
     // merupakan fungsi untuk melihat tabel dari database ( select * from )
     function get($tabel, $order = null)
