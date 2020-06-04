@@ -8,7 +8,10 @@ defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
 |
 */
 
-$dbhost_ = 'localhost'; // host your server
-$dbname_ = ''; // your database name
-$dbuser_ = 'root'; // user your server
-$dbpass_ = '';  // pass your server
+// for database mysql and driver connection by default is PDO()
+$dbconfig = [
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'cms_development',
+        ];

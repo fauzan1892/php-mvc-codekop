@@ -7,20 +7,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   |
  */
 
+use \PDO;
+use Config;
+
  class Database
 {
 
     public function __construct()
     {
-        global $dbhost_;
-        global $dbname_;
-        global $dbuser_;
-        global $dbpass_;
+        global $dbconfig;
 
-        $this->host = $dbhost_;
-        $this->name = $dbname_;
-        $this->user = $dbuser_;
-        $this->pass = $dbpass_;
+        $this->host = $dbconfig['hostname'];
+        $this->name = $dbconfig['database'];
+        $this->user = $dbconfig['username'];
+        $this->pass = $dbconfig['password'];
 
         if($this->name !== '')
         {

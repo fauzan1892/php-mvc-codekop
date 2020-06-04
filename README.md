@@ -2,14 +2,21 @@
 A simple open web project using php mvc frameworks from Codekop 
 
 ## Starter Apps :
-setting base url and default controller on index : app/Config/Config.php
+setting base url on index : app/Config/Config.php
 
 <pre>
-define('base_url',"http://".$_SERVER['HTTP_HOST'].preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/'); 
-define('default_view','Home');
+ $config['base_url'] = "http://".$_SERVER['HTTP_HOST'].preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
 </pre>
 
-setting database : app/Config/Database.php
+## Default Controller
+setting default controller : app/Config/Routes.php
+<pre>
+$routes['DefaultController'] = 'Home::index';
+</pre>
+
+## Setting Database
+
+setting database  : app/Config/Database.php
 
 <pre>
     $dbhost_ = 'localhost'; // host your server
@@ -18,9 +25,20 @@ setting database : app/Config/Database.php
     $dbpass_ = '';  // pass your server
 </pre>
 
-## Controllers
-
+## Model View Controller
+create models in codekop framework on app/Models
 create controller in codekop framework on app/Controllers
+create views in codekop framework on app/Views :
+how to use views in controller example :
+<pre>
+// controller 
+public function index()
+{
+    $data['title'] = 'Selamat datang di codekop php mvc';
+    $this->show->view('welcome_view', $data);
+}
+
+</pre>
 
 ## Contributors
 
