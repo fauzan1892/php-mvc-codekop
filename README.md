@@ -27,7 +27,9 @@ setting database  : app/Config/Database.php
 
 ## Model View Controller
 create models in codekop framework on app/Models
+<br/>
 create controller in codekop framework on app/Controllers
+<br/>
 create views in codekop framework on app/Views :
 how to use views in controller example :
 <pre>
