@@ -11,4 +11,13 @@ class Home extends Controller {
         $this->show->view('welcome_view', $data);
     }
 
+    public function test()
+    {
+        $data = [
+            'title'         => 'Program testing',
+            'page_title'    => 'Page Testing'
+        ];
+
+        $this->show->view('tes_view', $data);
+    }
 }
