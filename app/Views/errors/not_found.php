@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');?>
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

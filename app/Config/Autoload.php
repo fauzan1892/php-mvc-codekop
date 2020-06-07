@@ -1,5 +1,5 @@
 <?php namespace Config;
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
+defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
   | Helper Settings

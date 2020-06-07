@@ -21,4 +21,4 @@ define('base_url', $config['base_url']);
 define('BASEPATH', base_url);
 
 // avoid direct access
-defined('BASEPATH') or exit('Tidak ada akses skrip langsung diizinkan !');
+defined('BASEPATH') OR exit('No direct script access allowed');
