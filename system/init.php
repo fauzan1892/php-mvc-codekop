@@ -12,6 +12,7 @@
     require_once 'Database.php';
     require_once 'app/Config/Database.php';
     
+    require_once 'Models.php';
     require_once 'Helper.php';
     require_once 'Session.php';
     require_once 'Input.php';
@@ -21,6 +22,9 @@
     require_once 'Views.php';
     require_once 'Crud.php';
 
-    $app = new \System\App($routes['DefaultController']);
+    // timezone 
+    date_default_timezone_set($config['timezone']);
+
+    $app = new \System\App($routes['DefaultController'],$routes['active']);
 
 ?>

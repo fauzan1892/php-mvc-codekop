@@ -10,6 +10,16 @@
   |
  */
   $config['base_url'] = "http://".$_SERVER['HTTP_HOST'].preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
- 
 
+/*
+  |
+  | Default Timezone
+  |
+  |
+  |
+  |
+  */
+
+  $config['timezone'] = 'Asia/Jakarta';
+  
 ?>
