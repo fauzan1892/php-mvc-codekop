@@ -10,6 +10,7 @@ class Home extends Controller {
         parent::__construct();
         $this->model('Test');
     }
+    
     public function index()
     {
         $data['title'] = 'Selamat datang di codekop php mvc';
