@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   | 
   | note : can't be scandir for the controler in a new folder on app/Controllers
   |
+  |
  */
 
 class App{
@@ -73,6 +74,8 @@ class App{
             }
         }else{
             //  i cant of think in this case
+            //  if is active on this routes
+
         }
     }
 }
