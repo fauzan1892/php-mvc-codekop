@@ -1,4 +1,4 @@
-## Codekop PHP MVC Version 1.0 ( Beta )
+## Codekop PHP MVC Codekop Version 1.0 ( Beta )
 A simple open web project using php mvc frameworks from Codekop 
 
 ## Starter Apps :
