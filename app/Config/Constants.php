@@ -1,4 +1,6 @@
 <?php
+use System\Config;
+$config = new \System\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,7 +11,7 @@
 | this is url of base_url 
 */
 
-define('base_url', $config['base_url']);
+define('base_url', $config::baseURL());
 
 /*
 |--------------------------------------------------------------------------

@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       }
    }
 
-   function base_url($url)
+   function base_url($url = null)
    {
       return base_url.$url;
    }

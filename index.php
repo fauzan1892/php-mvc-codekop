@@ -18,7 +18,7 @@
 
 if(phpversion() >= '5.6')
 {
-    require_once 'system/init.php';
+    require_once 'system/run.php';
 }else{
     echo 'Minimum php version for running is 5.6+, and Your php version is '.phpversion();
 }

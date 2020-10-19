@@ -1,4 +1,5 @@
 <?php
+    require_once 'system/Config/Config.php';
     require_once 'app/Config/Config.php';
     require_once 'app/Config/Constants.php';
 
@@ -12,18 +13,15 @@
     require_once 'Database.php';
     require_once 'app/Config/Database.php';
     
-    require_once 'Models.php';
     require_once 'Helper.php';
-    require_once 'Session.php';
-    require_once 'Input.php';
 
-    require_once 'Controller.php';
-    require_once 'App.php';
-    require_once 'Views.php';
-    require_once 'Crud.php';
-
-    // timezone 
-    date_default_timezone_set($config['timezone']);
+    require_once 'Core/Session.php';
+    require_once 'Core/Models.php';
+    require_once 'Core/Input.php';
+    require_once 'Core/Controller.php';
+    require_once 'Core/App.php';
+    require_once 'Core/Views.php';
+    require_once 'Core/Crud.php';
 
     $app = new \System\App($routes['DefaultController'],$routes['active']);
 

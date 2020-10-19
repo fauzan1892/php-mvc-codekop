@@ -44,7 +44,7 @@ class App{
                     $object->$c();
 
                 }else{
-                    include 'app/Views/errors/not_found.php';
+                    include 'app/Views/errors/error_404.php';
                 }
 
             }else{
@@ -61,7 +61,7 @@ class App{
                         if ((int)method_exists($class,$func) == '1') {
                             $object->$func();
                         } else {
-                            include 'app/Views/errors/not_found.php';
+                            include 'app/Views/errors/error_404.php';
                         }
 
                     }else{
@@ -69,7 +69,7 @@ class App{
                     }
                     
                 }else{
-                    include 'app/Views/errors/not_found.php';
+                    include 'app/Views/errors/error_404.php';
                 }
             }
         }else{

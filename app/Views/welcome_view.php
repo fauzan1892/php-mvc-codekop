@@ -38,6 +38,7 @@
 		font-family: Consolas, Monaco, Courier New, Courier, monospace;
 		font-size: 12px;
 		background-color: #ddd;
+		border-radius:7px 7px 7px 7px;
 		border: 1px solid #D0D0D0;
 		color: #002166;
 		display: block;
@@ -62,6 +63,7 @@
 		margin: 10px;
 		border: 1px solid #D0D0D0;
 		/**box-shadow: 0 0 50px #78acff;**/
+		border-radius:7px 7px 7px 7px;
         background:#1d8a60;
         color:#fff;
 	}
@@ -69,18 +71,18 @@
 </head>
 <body>
 <div id="container">
-	<h1>Selamat datang di Codekop PHP MVC</h1>
+	<h1>Selamat datang di Codekop PHP Framework</h1>
 
 	<div id="body">
 		<p>Halaman yang Anda lihat sedang dibuat secara dinamis oleh Bingkai Kerja Web Codekop </p>
 
-		<p>Jika Anda mau mengedit halaman ini dan controller include, terletak di : </p>
+		<p>Jika Anda mau mengedit halaman ini dan  include controller, terletak di : </p>
 		<code>app/Controllers/Home.php</code>
 
 		<p>Dokumentasi cara penggunaannya nanti dulu ya pantengin aja <a href="https://www.codekop.com/">Codekop.com</a>.</p>
 	</div>
 
-	<p class="footer">Page Rendered in <?=page_rendered();?>s - Codekop PHP MVC Version <strong>1.0</strong></p>
+	<p class="footer">Page Rendered in <?=page_rendered();?>s - Codekop PHP Framework Version <strong>1.0</strong></p>
 </div>
 </body>
 </html>
