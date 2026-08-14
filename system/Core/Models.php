@@ -1,4 +1,6 @@
-<?php namespace System;
+<?php
+declare(strict_types=1);
+namespace System;
 defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
@@ -8,8 +10,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 
 class Models{
+    protected ?\PDO $db = null;
+    protected Views $show;
+    protected Session $session;
+    protected Input $input;
+    protected Crud $crud;
 
-    function __construct()
+    public function __construct()
     {
         $db  = new Database;
         $this->db = $db->connect();

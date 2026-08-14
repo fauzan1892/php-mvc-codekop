@@ -1,95 +1,70 @@
-<?php namespace System;
-defined('BASEPATH') OR exit('No direct script access allowed');
-/*
-  |--------------------------------------------------------------------------
-  | Crud Settings
-  |--------------------------------------------------------------------------
-  |
- */
+<?php
+declare(strict_types=1);
+namespace System;
+defined('BASEPATH') || exit('No direct script access allowed');
+
 class Crud extends \System\Database
 {
-    // merupakan fungsi untuk melihat tabel dari database ( select * from )
-    function get($tabel, $order = null)
+    private function identifier(string $identifier): string
     {
-        return $this->db->query("SELECT * FROM $tabel $order");
+        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)?$/', $identifier)) {
+            throw new \InvalidArgumentException('Invalid SQL identifier.');
+        }
+        return $identifier;
     }
 
-    // merupakan fungsi untuk melihat data table dari database berdasarkan id
-    function get_where($tabel,$where)
+    public function get(string $table, ?string $order = null): \PDOStatement
     {
-        $key = array_keys($where);
-        $val = array_values($where);
+        $sql = 'SELECT * FROM ' . $this->identifier($table);
+        if ($order !== null && $order !== '') $sql .= ' ORDER BY ' . $this->identifier($order);
+        return $this->db->query($sql);
+    }
 
-        if(count($key) > 0)
-        {
-            $where = implode('=? AND ', $key).'=?';
-        }else{
-            $where = implode('=? ', $key);
-        }
-
-        $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where");
-        $row->execute($val);
+    public function get_where(string $table, array $where): \PDOStatement
+    {
+        $keys = array_keys($where);
+        $columns = array_map(fn(string $column): string => $this->identifier($column), $keys);
+        $sql = 'SELECT * FROM ' . $this->identifier($table) . ' WHERE ' . implode('=? AND ', $columns) . '=?';
+        $row = $this->db->prepare($sql);
+        $row->execute(array_values($where));
         return $row;
     }
 
-    // merupakan fungsi untuk melihat data table dari database berdasarkan id
-    function get_where_or($tabel,$where)
+    public function get_where_or(string $table, array $where): \PDOStatement
     {
-        $key = array_keys($where);
-        $val = array_values($where);
-
-        if(count($key) > 0)
-        {
-            $where = implode('=? OR ', $key).'=?';
-        }else{
-            $where = implode('=? ', $key);
-        }
-
-        $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where");
-        $row->execute($val);
+        $keys = array_keys($where);
+        $columns = array_map(fn(string $column): string => $this->identifier($column), $keys);
+        $sql = 'SELECT * FROM ' . $this->identifier($table) . ' WHERE ' . implode('=? OR ', $columns) . '=?';
+        $row = $this->db->prepare($sql);
+        $row->execute(array_values($where));
         return $row;
     }
 
-    // merupakan fungsi untuk tambah data
-    function insert($tabel,$paramsArr)
+    public function insert(string $table, array $data): bool
     {
-        $key = array_keys($paramsArr);
-        $val = array_values($paramsArr);
-
-        //sanitation needed!
-        $query = "INSERT INTO $tabel (" . implode(', ', $key) . ") "
-             . "VALUES ('" . implode("', '", $val) . "')";
-
-        $row = $this->db->prepare($query);
-        return $row ->execute();
+        $keys = array_keys($data);
+        $columns = array_map(fn(string $column): string => $this->identifier($column), $keys);
+        $sql = 'INSERT INTO ' . $this->identifier($table) . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', array_fill(0, count($data), '?')) . ')';
+        return $this->db->prepare($sql)->execute(array_values($data));
     }
 
-    // merupakan fungsi edit data
-    function update($tabel,$data,$where,$id)
+    public function update(string $table, array $data, string $where, mixed $id): bool
     {
-        $setPart = array();
-        foreach ($data as $key => $value)
-        {
-            $setPart[] = $key."=:".$key;
+        $parts = [];
+        foreach ($data as $key => $value) {
+            $safeKey = $this->identifier((string) $key);
+            $parts[] = $safeKey . '=:' . $safeKey;
         }
-        $sql = "UPDATE $tabel SET ".implode(', ', $setPart)." WHERE $where = :id";
-        $row = $this->db->prepare($sql);
-        //Bind our values.
-        $row ->bindValue(':id',$id); // where
-        foreach($data as $param => $val)
-        {
-    
-            $row ->bindValue($param, $val);
-        }
-        return $row ->execute();
-    }
-    
-    // merupakan fungsi untuk hapus data
-    function delete($tabel,$where,$id)
-    {
-        $sql = "DELETE FROM $tabel WHERE $where = ?";
-        $row = $this->db->prepare($sql);
-        return $row ->execute(array($id));
+        $sql = 'UPDATE ' . $this->identifier($table) . ' SET ' . implode(', ', $parts) . ' WHERE ' . $this->identifier($where) . ' = :id';
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':id', $id);
+        foreach ($data as $key => $value) $statement->bindValue((string) $key, $value);
+        return $statement->execute();
     }
 
+    public function delete(string $table, string $where, mixed $id): bool
+    {
+        $sql = 'DELETE FROM ' . $this->identifier($table) . ' WHERE ' . $this->identifier($where) . ' = ?';
+        return $this->db->prepare($sql)->execute([$id]);
+    }
 }

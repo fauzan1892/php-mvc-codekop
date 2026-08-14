@@ -1,0 +1,5 @@
+/vendor/
+/storage/sessions/*
+!/storage/sessions/.gitkeep
+.DS_Store
+*.log

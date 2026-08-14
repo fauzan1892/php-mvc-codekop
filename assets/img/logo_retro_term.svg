@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0ea5ff"/>
+  <text x="256" y="268"
+        font-family="'Arial Black', 'Segoe UI Black', 'Helvetica Neue', Arial, sans-serif"
+        font-size="188"
+        font-weight="900"
+        fill="#ffffff"
+        text-anchor="middle"
+        dominant-baseline="middle">
+    &gt;_R
+  </text>
+</svg>

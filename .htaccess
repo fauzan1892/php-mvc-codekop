@@ -1,6 +1,17 @@
 Options -Multiviews
 
+<FilesMatch "^(\.env|composer\.(json|lock)|README\.md)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
 RewriteEngine On
+RewriteRule ^(?:app|system|storage|vendor)(?:/|$) - [F,L]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]

@@ -20,7 +20,7 @@ define('base_url', $config::baseURL());
 |
 |
 */
-define('BASEPATH', base_url);
+// BASEPATH is defined by the front controller for filesystem-safe bootstrapping.
 
 // avoid direct access
 defined('BASEPATH') OR exit('No direct script access allowed');

@@ -1,103 +1,43 @@
 <?php
-/*
-  |--------------------------------------------------------------------------
-  | ERROR DISPLAY
-  |--------------------------------------------------------------------------
-  |
-  |
- */
-    
-    $debug_handler = 'development';
+declare(strict_types=1);
 
-    if($debug_handler == 'testing' || $debug_handler == 'development')
-    {
-        function errorHandler($errno, $errstr, $errfile, $errline) {
+$debug_handler = defined('APP_ENV') ? APP_ENV : 'production';
+define('APP_DEBUG', in_array($debug_handler, ['testing', 'development'], true));
 
-            if (!(error_reporting() & $errno)) {
-                // This error code is not included in error_reporting, so let it fall
-                // through to the standard PHP error handler
-                return false;
-            }else{
-                
-                echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;
-                    padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
-                    background:#e32b4a;color:#fff;font-size:16px; }</style>';
-        
-            }
+error_reporting(APP_DEBUG ? E_ALL : 0);
+ini_set('display_errors', APP_DEBUG ? '1' : '0');
+ini_set('log_errors', '1');
 
-            switch ($errno) {
-                case E_STRICT:
-                    echo '<div class="database_erroryzx">';
-                    echo("<b>Strict error</b> $errstr at $errfile : $errline \n");
-                    echo '</div>';
-                    break;
-
-                case E_NOTICE:
-                case E_USER_NOTICE:
-                    echo '<div class="database_erroryzx">';
-                    echo("<b>Notice error</b> $errstr at $errfile : $errline \n");
-                    echo '</div>';
-                    break;
-
-                case E_DEPRECATED:
-                case E_USER_DEPRECATED:
-                    echo '<div class="database_erroryzx">';
-                    echo("<b>Deprecated error</b> $errstr at $errfile : $errline \n");
-                    echo '</div>';
-                    break;
-
-                case E_WARNING:
-                case E_USER_WARNING:
-                case E_COMPILE_WARNING:
-                case E_RECOVERABLE_ERROR:
-
-                    echo '<div class="database_erroryzx">';
-                    echo("<b>Warning error </b>$errstr at $errfile : $errline \n");
-                    echo '</div>';
-                    break;
-                    
-                case E_PARSE:
-                case E_ERROR:
-                case E_CORE_ERROR:
-                case E_COMPILE_ERROR:
-                case E_USER_ERROR:
-                    echo '<div class="database_erroryzx">';
-                    echo '</div><br/>';
-                    echo("<b>Fatal error</b> $errstr at $errfile : $errline \n");
-                    break;
-
-                default:
-                    echo '<div class="database_erroryzx">';
-                    exit("Unknown error</b> at $errfile : $errline \n");
-                    echo '</div><br/>';
-            }
-        }
-        set_error_handler("errorHandler");
-
-    }else if($debug_handler == 'production'){
-        error_reporting(0);
-        if (!(error_reporting() & $errno)) {
-            // This error code is not included in error_reporting, so let it fall
-            // through to the standard PHP error handler
-            return false;
-        }else{
-            
-            echo '<style> .database_erroryzx{ width:0 100px;margin: 10px;
-                padding-top:1pc;padding-bottom:1pc;padding-left:2pc;padding-right:2pc;
-                background:#e32b4a;color:#fff;font-size:16px; }</style>';
-    
-        }
-
-        echo '<div class="database_erroryzx" style="background:#3273a8;text-align:center;font-size:24px;">';
-        echo "Oops! Something went wrong! We're looking into it!";
-        echo '</div><br/>';
-    }else{
-        // error handler function
-        function errorHandler($errno, $errstr) {
-            echo "Error: [$errno] $errstr";
-        }
-        
-        // set error handler
-        set_error_handler("errorHandler");
-        
-    }
+if (APP_DEBUG) {
+    $debugNonce = htmlspecialchars((string) (defined('CSP_NONCE') ? CSP_NONCE : ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $debugStyle = '<style nonce="' . $debugNonce . '">
+        .codekop-debug-error{margin:1rem;padding:1rem 1.25rem;border:1px solid #f87171;background:#24151a;color:#fecaca;border-radius:8px;font:14px/1.6 ui-monospace,SFMono-Regular,monospace;white-space:pre-wrap;overflow:auto}
+        .codekop-debug-error strong{color:#fca5a5}.codekop-debug-error small{color:#fda4af}
+    </style>';
+    set_error_handler(static function (int $severity, string $message, string $file, int $line) use ($debugStyle): bool {
+        if (!(error_reporting() & $severity)) return false;
+        $label = match (true) {
+            in_array($severity, [E_DEPRECATED, E_USER_DEPRECATED], true) => 'Deprecated',
+            in_array($severity, [E_NOTICE, E_USER_NOTICE], true) => 'Notice',
+            default => 'PHP error',
+        };
+        echo $debugStyle . '<div class="codekop-debug-error"><strong>' . $label . '</strong> '
+            . htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+            . '<br><small>' . htmlspecialchars($file, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+            . ':' . $line . '</small></div>';
+        return true;
+    });
+    set_exception_handler(static function (Throwable $exception) use ($debugStyle): void {
+        http_response_code(500);
+        echo $debugStyle . '<main class="codekop-debug-error"><strong>Unhandled exception</strong><br>'
+            . htmlspecialchars($exception->getMessage(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+            . '<br><small>' . htmlspecialchars($exception->getFile(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+            . ':' . $exception->getLine() . '</small></main>';
+    });
+} else {
+    set_exception_handler(static function (Throwable $exception): void {
+        error_log((string) $exception);
+        http_response_code(500);
+        echo 'Oops! Something went wrong.';
+    });
+}

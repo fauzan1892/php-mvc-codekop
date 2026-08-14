@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 defined('BASEPATH') OR exit('No direct script access allowed');
 /*
   |--------------------------------------------------------------------------
@@ -8,21 +9,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   |
  */
 
-   function redirect($url = null)
+   function redirect(?string $url = null): never
    {
       if($url)
       {
          // return header('Location:'.$url);
-         echo '<script>window.location="'.$url.'";</script>';
+         header('Location: ' . filter_var($url, FILTER_SANITIZE_URL), true, 302);
+         exit;
       }else{
          // return header('Location:'.base_url);
-         echo '<script>window.location="'.base_url.'";</script>';
+         header('Location: ' . base_url, true, 302);
+         exit;
       }
    }
 
-   function base_url($url = null)
+   function base_url(?string $url = null): string
    {
       return base_url.$url;
+   }
+
+   function e(mixed $value): string
+   {
+      return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+   }
+
+   function csrf_field(): string
+   {
+      return '<input type="hidden" name="_csrf" value="' . e(\System\Security::token()) . '">';
    }
 
    function getSegments($segment)
@@ -37,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       return $uriSegments[$cont];
    }
 
-   function page_rendered()
+    function page_rendered(): string
    {
       $start_time = microtime(TRUE);
       $end_time = microtime(TRUE);

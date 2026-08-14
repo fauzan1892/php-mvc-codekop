@@ -1,59 +1,65 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Not Found</title>
-
-        <!-- Fonts -->
-        <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .code {
-                border-right: 2px solid;
-                font-size: 26px;
-                padding: 0 15px 0 15px;
-                text-align: center;
-            }
-
-            .message {
-                font-size: 18px;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="code">404 </div>
-
-            <div class="message" style="padding: 10px;">Not Found</div>
+<?php defined('BASEPATH') || exit('No direct script access allowed'); ?>
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 · Tidak ditemukan</title>
+    <link rel="icon" href="<?= e(base_url('assets/img/logo_retro_term.svg')) ?>">
+    <link rel="stylesheet" href="<?= e(base_url('assets/retro-term/retro-term.min.css')) ?>">
+    <link rel="stylesheet" href="<?= e(base_url('assets/retro-term/retro-term-icons.min.css')) ?>">
+    <style nonce="<?= e(CSP_NONCE) ?>">
+        .codekop-error { min-height:100vh; display:grid; place-items:center; padding:1rem; }
+        .codekop-error-card { width:min(680px,100%); padding:clamp(1.5rem,5vw,4rem); border:1px solid var(--rt-border); background:var(--rt-surface); box-shadow:0 20px 70px rgba(0,0,0,.22); }
+        .codekop-error-brand { display:flex; align-items:center; gap:.7rem; color:var(--rt-text); font-weight:900; text-decoration:none; }
+        .codekop-error-brand img { width:48px; height:48px; }
+        .codekop-error-code { margin:2rem 0 .25rem; color:var(--rt-primary); font:900 clamp(5rem,18vw,10rem)/.8 monospace; letter-spacing:-.08em; }
+        .codekop-error-title { margin:.75rem 0; }
+        .codekop-error-copy { color:var(--rt-muted); line-height:1.7; }
+        .codekop-error-actions { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.5rem; }
+        .codekop-error-actions i { width:1.1rem; height:1.1rem; display:inline-block; margin-right:.35rem; background:currentColor; vertical-align:-.15em; }
+        .codekop-error-toggle { float:right; }
+    </style>
+</head>
+<body>
+<main class="codekop-error">
+    <section class="codekop-error-card">
+        <button class="rt-btn rt-btn-secondary codekop-error-toggle" id="codekopThemeToggle" type="button" aria-label="Ganti tema">
+            <i class="rt rt-moon" aria-hidden="true"></i>
+        </button>
+        <a class="codekop-error-brand" href="<?= e(base_url()) ?>">
+            <img src="<?= e(base_url('assets/img/logo_retro_term.svg')) ?>" alt="Retro-term">
+            <span>Codekop MVC</span>
+        </a>
+        <div class="codekop-error-code">404</div>
+        <h1 class="codekop-error-title">Halaman tidak ditemukan</h1>
+        <p class="codekop-error-copy">
+            Route yang diminta tidak tersedia atau sudah dipindahkan.
+            Periksa URL lalu kembali ke halaman utama.
+        </p>
+        <div class="codekop-error-actions">
+            <a class="rt-btn rt-btn-primary" href="<?= e(base_url()) ?>">
+                <i class="rt rt-home" aria-hidden="true"></i> Beranda
+            </a>
+            <button class="rt-btn rt-btn-secondary" id="codekopBackButton" type="button">
+                <i class="rt rt-arrow-left" aria-hidden="true"></i> Kembali
+            </button>
         </div>
-    </body>
+    </section>
+</main>
+<script src="<?= e(base_url('assets/retro-term/retro-term.min.js')) ?>" defer></script>
+<script nonce="<?= e(CSP_NONCE) ?>">
+    (() => {
+        const root = document.documentElement;
+        const saved = localStorage.getItem('codekop-theme');
+        if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+        document.getElementById('codekopThemeToggle')?.addEventListener('click', () => {
+            const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.dataset.theme = next;
+            localStorage.setItem('codekop-theme', next);
+        });
+        document.getElementById('codekopBackButton')?.addEventListener('click', () => history.back());
+    })();
+</script>
+</body>
 </html>
