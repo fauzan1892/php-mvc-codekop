@@ -9,7 +9,7 @@ $pageTitle = $page_title ?? 'Program testing';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title) ?> · Codekop MVC</title>
-    <link rel="icon" href="<?= e(base_url('assets/img/logo_retro_term.svg')) ?>">
+    <link rel="icon" href="<?= e(base_url('assets/img/codekop-logo.png')) ?>">
     <link rel="stylesheet" href="<?= e(base_url('assets/retro-term/retro-term.min.css')) ?>">
     <link rel="stylesheet" href="<?= e(base_url('assets/retro-term/retro-term-icons.min.css')) ?>">
     <style nonce="<?= e(CSP_NONCE) ?>">
@@ -29,7 +29,7 @@ $pageTitle = $page_title ?? 'Program testing';
 <body>
 <header class="rt-container test-nav">
     <a class="test-brand" href="<?= e(base_url()) ?>">
-        <img src="<?= e(base_url('assets/img/logo_retro_term.svg')) ?>" alt="Retro-term">
+        <img src="<?= e(base_url('assets/img/codekop-logo.png')) ?>" alt="Codekop MVC">
         <span>Codekop MVC</span>
     </a>
     <button class="rt-btn rt-btn-secondary" id="testThemeToggle" type="button" aria-label="Ganti tema">

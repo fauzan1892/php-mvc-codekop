@@ -6,6 +6,8 @@ Semua perubahan penting pada project ini dicatat di file ini.
 
 ### Added
 
+- Logo Codekop baru pada `assets/img/codekop-logo.png`.
+- Dokumentasi HTML statis pada `/documentation/`.
 - Dukungan route parameter bernama, seperti `/api/route/{id}`.
 - Dukungan nested controller dan model dengan namespace `App\\Controllers` dan
   `App\\Models`.
@@ -27,6 +29,8 @@ Semua perubahan penting pada project ini dicatat di file ini.
 
 ### Changed
 
+- Menggunakan logo baru pada welcome view, test view, halaman 404, dan
+  dokumentasi.
 - Menambahkan PSR-4 autoload untuk namespace `App\\`.
 - Merapikan file framework yang disentuh agar mengikuti PSR-12.
 - Memperbarui dokumentasi routing dan security di `README.md`.

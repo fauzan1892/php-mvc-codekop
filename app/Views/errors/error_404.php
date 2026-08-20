@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>404 · Tidak ditemukan</title>
-    <link rel="icon" href="<?= e(base_url('assets/img/logo_retro_term.svg')) ?>">
+    <link rel="icon" href="<?= e(base_url('assets/img/codekop-logo.png')) ?>">
     <link rel="stylesheet" href="<?= e(base_url('assets/retro-term/retro-term.min.css')) ?>">
     <link rel="stylesheet" href="<?= e(base_url('assets/retro-term/retro-term-icons.min.css')) ?>">
     <style nonce="<?= e(CSP_NONCE) ?>">
@@ -28,7 +28,7 @@
             <i class="rt rt-moon" aria-hidden="true"></i>
         </button>
         <a class="codekop-error-brand" href="<?= e(base_url()) ?>">
-            <img src="<?= e(base_url('assets/img/logo_retro_term.svg')) ?>" alt="Retro-term">
+            <img src="<?= e(base_url('assets/img/codekop-logo.png')) ?>" alt="Codekop MVC">
             <span>Codekop MVC</span>
         </a>
         <div class="codekop-error-code">404</div>

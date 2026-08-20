@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="id" data-theme="dark" data-radius="flat">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Dokumentasi Codekop PHP MVC boilerplate framework.">
+    <title>Documentation · Codekop PHP MVC</title>
+    <link rel="icon" href="../assets/img/codekop-logo.png">
+    <link rel="stylesheet" href="../assets/retro-term/retro-term.min.css">
+    <style>
+        :root {
+            --docs-width: 1180px;
+            --docs-code: #101827;
+            --docs-green: #9effa9;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 10% 0%, rgba(99, 91, 255, .16), transparent 28rem),
+                radial-gradient(circle at 90% 10%, rgba(0, 184, 255, .12), transparent 24rem),
+                var(--rt-bg);
+        }
+
+        .docs-shell {
+            width: min(var(--docs-width), calc(100% - 2rem));
+            margin: 0 auto;
+        }
+
+        .docs-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--rt-border);
+        }
+
+        .docs-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: .75rem;
+            color: var(--rt-text);
+            font-weight: 900;
+        }
+
+        .docs-brand img {
+            width: 42px;
+            height: 42px;
+        }
+
+        .docs-layout {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr);
+            gap: 2.5rem;
+            padding: 3rem 0 5rem;
+        }
+
+        .docs-sidebar {
+            position: sticky;
+            top: 1rem;
+            align-self: start;
+        }
+
+        .docs-sidebar-title {
+            margin-bottom: .75rem;
+            color: var(--rt-muted);
+            font-size: .72rem;
+            font-weight: 900;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .docs-sidebar a {
+            display: block;
+            padding: .45rem .7rem;
+            border-left: 2px solid transparent;
+            color: var(--rt-muted);
+            font-size: .9rem;
+        }
+
+        .docs-sidebar a:hover {
+            border-left-color: var(--rt-primary);
+            color: var(--rt-text);
+        }
+
+        .docs-hero {
+            margin-bottom: 2.5rem;
+        }
+
+        .docs-eyebrow {
+            margin-bottom: .75rem;
+            color: var(--rt-primary-2);
+            font-size: .78rem;
+            font-weight: 900;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .docs-hero h1 {
+            max-width: 780px;
+            margin-bottom: 1rem;
+        }
+
+        .docs-hero p {
+            max-width: 760px;
+            color: var(--rt-muted);
+            font-size: 1.08rem;
+        }
+
+        .docs-section {
+            margin-top: 3rem;
+            scroll-margin-top: 1.5rem;
+        }
+
+        .docs-section > h2 {
+            padding-bottom: .7rem;
+            border-bottom: 1px solid var(--rt-border);
+        }
+
+        .docs-section > h3 {
+            margin-top: 1.75rem;
+            font-size: 1.25rem;
+        }
+
+        .docs-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .docs-card {
+            padding: 1.2rem;
+            border: 1px solid var(--rt-border);
+            background: var(--rt-surface);
+        }
+
+        .docs-card h3 {
+            margin-bottom: .5rem;
+            font-size: 1rem;
+        }
+
+        .docs-card p {
+            margin: 0;
+            color: var(--rt-muted);
+            font-size: .9rem;
+        }
+
+        .docs-code {
+            margin: 1rem 0;
+            border-color: #26354f;
+            background: var(--docs-code);
+            color: var(--docs-green);
+            font-size: .88rem;
+            line-height: 1.7;
+        }
+
+        .docs-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--rt-border);
+        }
+
+        .docs-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 560px;
+        }
+
+        .docs-table th,
+        .docs-table td {
+            padding: .75rem 1rem;
+            border-bottom: 1px solid var(--rt-border);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .docs-table th {
+            color: var(--rt-muted);
+            font-size: .75rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .docs-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .docs-note {
+            margin: 1rem 0;
+            padding: 1rem 1.1rem;
+            border-left: 3px solid var(--rt-primary);
+            background: rgba(var(--rt-primary-rgb), .08);
+        }
+
+        .docs-footer {
+            padding: 2rem 0;
+            border-top: 1px solid var(--rt-border);
+            color: var(--rt-muted);
+            font-size: .85rem;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .docs-layout {
+                display: block;
+            }
+
+            .docs-sidebar {
+                position: static;
+                display: flex;
+                flex-wrap: wrap;
+                gap: .25rem .5rem;
+                margin-bottom: 2rem;
+            }
+
+            .docs-sidebar-title {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="docs-shell docs-nav">
+    <a class="docs-brand" href="../">
+        <img src="../assets/img/codekop-logo.png" alt="Codekop MVC">
+        <span>Codekop PHP MVC</span>
+    </a>
+    <a class="rt-btn rt-btn-secondary" href="../">Beranda</a>
+</header>
+
+<div class="docs-shell docs-layout">
+    <aside class="docs-sidebar" aria-label="Daftar isi">
+        <div class="docs-sidebar-title">Daftar isi</div>
+        <a href="#mulai">Mulai cepat</a>
+        <a href="#struktur">Struktur</a>
+        <a href="#routing">Routing</a>
+        <a href="#controller">Controller &amp; model</a>
+        <a href="#request-response">Request &amp; response</a>
+        <a href="#security">Security</a>
+        <a href="#konfigurasi">Konfigurasi</a>
+        <a href="#verifikasi">Verifikasi</a>
+    </aside>
+
+    <main>
+        <section class="docs-hero">
+            <div class="docs-eyebrow">Framework documentation</div>
+            <h1>Boilerplate PHP MVC yang ringan, aman, dan mudah dikembangkan.</h1>
+            <p>
+                Codekop PHP MVC adalah framework PHP-native untuk aplikasi web dan
+                API. Routing, controller, model, view, session, CSRF, CSP, dan PDO
+                tersedia tanpa framework besar.
+            </p>
+        </section>
+
+        <section class="docs-section" id="mulai">
+            <h2>Mulai cepat</h2>
+            <p>Persyaratan minimum adalah PHP 8.2+, Composer, dan database opsional.</p>
+            <pre class="docs-code"><code>composer install
+php -S 127.0.0.1:8080</code></pre>
+            <p>
+                Buka <code>/</code> untuk halaman utama atau
+                <code>/api/health</code> untuk memeriksa endpoint API.
+            </p>
+            <div class="docs-note">
+                Untuk production, ubah <code>env</code> menjadi
+                <code>production</code> pada <code>app/Config/Config.php</code>.
+            </div>
+        </section>
+
+        <section class="docs-section" id="struktur">
+            <h2>Struktur project</h2>
+            <div class="docs-card-grid">
+                <article class="docs-card"><h3>app/</h3><p>Controller, model, middleware, view, route, dan konfigurasi aplikasi.</p></article>
+                <article class="docs-card"><h3>system/</h3><p>Kernel MVC, router, request, response, session, security, dan database.</p></article>
+                <article class="docs-card"><h3>assets/</h3><p>Asset UI lokal dan plugin development tanpa CDN.</p></article>
+                <article class="docs-card"><h3>storage/</h3><p>Runtime session dan data internal yang tidak boleh dipublikasi.</p></article>
+            </div>
+        </section>
+
+        <section class="docs-section" id="routing">
+            <h2>Routing</h2>
+            <p>Route ditulis di <code>app/Config/Routes.php</code>.</p>
+            <pre class="docs-code"><code>use System\Route;
+
+Route::get('/users/{id}', 'Users@show')->name('users.show');
+Route::post('/users', 'Users@store');
+Route::apiGet('/api/health', 'Api@health');</code></pre>
+            <h3>Parameter, group, dan resource</h3>
+            <pre class="docs-code"><code>Route::group(['middleware' => ['csrf']], static function (): void {
+    Route::post('/users', 'Users@store');
+});
+
+Route::resource('/users', 'Users');</code></pre>
+            <p>
+                Method route yang tersedia: <code>get</code>, <code>head</code>,
+                <code>post</code>, <code>put</code>, <code>patch</code>,
+                <code>delete</code>, dan <code>options</code>.
+            </p>
+        </section>
+
+        <section class="docs-section" id="controller">
+            <h2>Controller &amp; model</h2>
+            <p>Controller dapat berupa class global lama atau class namespace PSR-4.</p>
+            <pre class="docs-code"><code>&lt;?php
+namespace App\Controllers;
+
+use System\Controller;
+
+final class Users extends Controller
+{
+    public function show(string $id): array
+    {
+        return ['id' =&gt; $id];
+    }
+}</code></pre>
+            <p>Model dapat dipanggil dari controller menggunakan loader bawaan:</p>
+            <pre class="docs-code"><code>$users = $this-&gt;model('Users');
+// atau App\Models\Admin\Users
+$users = $this-&gt;model('Admin\\Users');</code></pre>
+        </section>
+
+        <section class="docs-section" id="request-response">
+            <h2>Request &amp; response</h2>
+            <div class="docs-table-wrap">
+                <table class="docs-table">
+                    <thead><tr><th>API</th><th>Fungsi</th></tr></thead>
+                    <tbody>
+                    <tr><td><code>$this-&gt;request-&gt;route('id')</code></td><td>Mengambil parameter route.</td></tr>
+                    <tr><td><code>$this-&gt;request-&gt;query('q')</code></td><td>Mengambil query string.</td></tr>
+                    <tr><td><code>$this-&gt;request-&gt;json()</code></td><td>Membaca body JSON sebagai array.</td></tr>
+                    <tr><td><code>Response::json($data)</code></td><td>Menghasilkan response JSON.</td></tr>
+                    <tr><td><code>Response::redirect('/')</code></td><td>Menghasilkan redirect tervalidasi.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="docs-section" id="security">
+            <h2>Security</h2>
+            <p>Front controller memasang security headers dan CSP secara default.</p>
+            <div class="docs-card-grid">
+                <article class="docs-card"><h3>CSP</h3><p>Script inline memakai nonce dan koneksi dibatasi ke origin sendiri.</p></article>
+                <article class="docs-card"><h3>CSRF</h3><p>Gunakan <code>csrf_field()</code> atau header <code>X-CSRF-TOKEN</code>.</p></article>
+                <article class="docs-card"><h3>PDO</h3><p>Gunakan prepared statement dan identifier tervalidasi melalui CRUD.</p></article>
+                <article class="docs-card"><h3>Session</h3><p>Session memakai strict mode, cookie HttpOnly, dan SameSite.</p></article>
+            </div>
+            <pre class="docs-code"><code>Route::group(['middleware' =&gt; ['csrf']], static function (): void {
+    Route::post('/profile', 'Profile@update');
+});</code></pre>
+        </section>
+
+        <section class="docs-section" id="konfigurasi">
+            <h2>Konfigurasi</h2>
+            <p>Konfigurasi utama ada di <code>app/Config/Config.php</code>.</p>
+            <pre class="docs-code"><code>$appConfig = [
+    'env' =&gt; 'development',
+    'timezone' =&gt; 'Asia/Jakarta',
+    'session' =&gt; [
+        'name' =&gt; 'codekop_session',
+        'path' =&gt; ROOTPATH . 'storage/sessions',
+    ],
+];</code></pre>
+        </section>
+
+        <section class="docs-section" id="verifikasi">
+            <h2>Verifikasi</h2>
+            <pre class="docs-code"><code>composer validate --no-check-publish
+find . -path './vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l</code></pre>
+            <p>Pastikan lint, route smoke test, dan konfigurasi production berhasil sebelum deploy.</p>
+        </section>
+    </main>
+</div>
+
+<footer class="docs-shell docs-footer">
+    Codekop PHP MVC · Dokumentasi framework
+</footer>
+</body>
+</html>
