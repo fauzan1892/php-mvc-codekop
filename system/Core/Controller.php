@@ -47,8 +47,10 @@ class Controller
         }
         require_once $file;
 
-        $resolvedClass = class_exists($class) ? $class : $shortName;
-        if (!class_exists($resolvedClass)) {
+        // Models may still use the legacy global-class format. The model file
+        // was loaded above, so class_exists must not invoke PSR-4 autoloading.
+        $resolvedClass = class_exists($class, false) ? $class : $shortName;
+        if (!class_exists($resolvedClass, false)) {
             throw new \RuntimeException('Model class not found: ' . $model);
         }
         return new $resolvedClass();

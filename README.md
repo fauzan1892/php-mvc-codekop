@@ -10,6 +10,9 @@ bergantung pada framework besar. View tetap menggunakan PHP native, routing
 mendukung gaya Laravel, database menggunakan PDO, dan asset UI Retro-term
 disimpan lokal tanpa CDN.
 
+Support by [AITI Solutions](https://aiti-solutions.com/) dan
+[Codekop](https://www.codekop.com/).
+
 ## Tujuan project
 
 Tujuan utama recode ini:
@@ -69,6 +72,8 @@ Fitur boilerplate tambahan:
 - CSRF token dari form maupun header `X-CSRF-TOKEN`;
 - `CsrfMiddleware` opsional untuk route `POST`, `PUT`, `PATCH`, dan `DELETE`;
 - security headers tambahan untuk isolasi origin dan CSP `connect-src`.
+- queue backend dengan job di `app/Jobs`, worker CLI, retry/backoff, dan driver
+  file atau database.
 
 Boilerplate ini tidak memaksakan auth atau login. Middleware bersifat opsional
 dan dapat ditambahkan oleh aplikasi pemakai sesuai kebutuhan.
@@ -79,7 +84,7 @@ Yang harus ditambahkan oleh aplikasi pemakai sesuai kebutuhan:
 - migrasi database;
 - rate limiting;
 - policy atau permission yang lebih detail;
-- queue dan scheduler;
+- scheduler;
 - upload validation;
 - audit log bisnis;
 - observability production.
@@ -116,7 +121,14 @@ Yang harus ditambahkan oleh aplikasi pemakai sesuai kebutuhan:
         Debug.php
             Error handler development/production.
         Routes.php
-            Route web, API, dan middleware.
+            Aggregator yang hanya memanggil route web.php dan api.php.
+      Routes/
+        web.php
+            Route halaman web dan require route modul web.
+        api.php
+            Group prefix API dan require route modul API.
+        master.php, api_master.php
+            Contoh route per modul.
       Controllers/
         Home.php
         Api.php
@@ -130,6 +142,8 @@ Yang harus ditambahkan oleh aplikasi pemakai sesuai kebutuhan:
             Model aplikasi.
       Views/
             Template PHP dan halaman error.
+      Jobs/
+            Job backend yang mengimplementasikan `System\Queue\Contracts\ShouldQueue`.
       Helper/
             Helper aplikasi tambahan.
 
@@ -163,6 +177,10 @@ Yang harus ditambahkan oleh aplikasi pemakai sesuai kebutuhan:
             Base model.
       Database.php
           Connection manager PDO.
+      Queue/
+          Queue contract, dispatcher, driver, dan worker manager.
+      console.php
+          Perintah CLI, termasuk `queue:work`.
       Helper.php
           Helper global.
       run.php
@@ -176,11 +194,25 @@ Yang harus ditambahkan oleh aplikasi pemakai sesuai kebutuhan:
       plugins/php-debugbar/
           Asset DebugBar lokal.
 
+    documentation/
+      index.html
+          Pusat dokumentasi dan reader Markdown berbasis JavaScript lokal.
+      tutorials/
+          Tiga materi Markdown: framework, backend, dan production aman.
+
     storage/
       sessions/
           File session runtime.
+      queue/
+        pending/ processing/ failed/
+            Payload queue file driver; seluruh folder ditolak dari HTTP.
       .htaccess
           Penolakan akses HTTP langsung.
+    tests/
+      Unit/
+            PHPUnit unit test untuk queue dan komponen framework.
+      Security/
+            Smoke test akses HTTP Apache/Nginx.
 
 ## Alur request
 
@@ -242,6 +274,14 @@ berbentuk array, lalu disinkronkan otomatis ke System\Config.
             'jwt_secret' => '',
             'jwt_leeway' => 0,
         ],
+        'queue' => [
+            'driver' => 'file',
+            'default' => 'default',
+            'path' => ROOTPATH . 'storage/queue',
+            'retry_after' => 90,
+            'sleep' => 3,
+            'max_attempts' => 3,
+        ],
     ];
 
 Runtime accessor:
@@ -249,6 +289,7 @@ Runtime accessor:
     \System\Config::get('timezone');
     \System\Config::get('session.name');
     \System\Config::get('api.jwt_secret');
+    \System\Config::get('queue.driver');
     \System\Config::all();
 
 API lama tetap tersedia:
@@ -264,16 +305,29 @@ System\Config atau APP_CONFIG.
 Timezone default adalah Asia/Jakarta. PHP runtime juga menggunakan timezone
 tersebut untuk date dan timestamp aplikasi.
 
-## Routing web
+## Routing web dan API
 
-Route didefinisikan di app/Config/Routes.php:
+`app/Config/Routes.php` hanya menjadi aggregator. Route web ditulis di
+`app/Routes/web.php`, sedangkan route API ditulis di `app/Routes/api.php` atau
+file modul yang di-require dari sana.
 
-    <?php namespace Config;
-
+    // app/Routes/web.php
     use System\Route;
 
     Route::get('/', 'Home@index')->name('home');
     Route::get('/home/test', 'Home@test')->name('home.test');
+    require_once ROOTPATH . 'app/Routes/master.php';
+
+    // app/Routes/api.php
+    Route::prefix('api')->group(static function (): void {
+        Route::get('/health', 'Api@health')->name('api.health');
+        Route::post('/echo', 'Api@echo')->name('api.echo');
+        require_once ROOTPATH . 'app/Routes/api_master.php';
+    });
+
+Semua method HTTP biasa (`get`, `post`, `put`, `patch`, `delete`, `options`)
+di dalam prefix `api` otomatis memiliki URI `/api/...` dan diperlakukan sebagai
+response API. `apiGet()` dan method API lama tetap tersedia untuk kompatibilitas.
 
 Parameter route tersedia melalui request:
 
@@ -402,8 +456,9 @@ Asset UI disimpan lokal agar development tidak bergantung pada CDN.
 
 API memakai router dan controller yang sama:
 
-    Route::apiGet('/api/health', 'Api@health');
-    Route::apiPost('/api/echo', 'Api@echo');
+    // app/Routes/api_master.php, dipanggil dari app/Routes/api.php
+    Route::get('/health', 'Api@health');
+    Route::post('/echo', 'Api@echo');
 
 Endpoint bawaan:
 
@@ -452,6 +507,31 @@ Response API:
     return Response::json($data, 201);
     return Response::text('Accepted', 202);
     return Response::noContent();
+
+### Prompt AI untuk membuat API
+
+Minta AI membaca pola project lebih dulu, lalu gunakan prompt terukur seperti
+berikut:
+
+    Baca AGENTS.md, README.md, app/Routes/web.php, app/Routes/api.php,
+    app/Controllers/Api.php, system/Core/Request.php,
+    system/Core/Response.php, dan model yang relevan.
+
+    Buat API JSON resource products:
+    GET /api/products dengan search, page, per_page;
+    GET /api/products/{id};
+    POST /api/products;
+    PUT /api/products/{id};
+    DELETE /api/products/{id}.
+
+    Ikuti pola router/controller project. Gunakan Response::json(), validasi
+    server-side, prepared statements, whitelist order/kolom, status HTTP yang
+    tepat, JWT middleware untuk endpoint privat, dan test sukses/invalid/404/
+    401/403/SQL injection. Jangan menambah CDN atau dependency baru.
+
+    Sebelum edit tampilkan rencana dan file yang diubah. Setelah edit jalankan
+    PHPUnit, lint PHP, dan smoke test curl. Laporkan contoh request/response,
+    risiko keamanan, dan hasil verifikasi.
 
 Error API menggunakan JSON:
 
@@ -544,7 +624,7 @@ JWT tersedia sebagai middleware opsional. Konfigurasi pada array api:
 
 Pasang:
 
-    Route::apiGet('/api/profile', 'Api@profile')
+    Route::get('/profile', 'Api@profile')
         ->middleware('jwt');
 
 Kirim header:
@@ -599,6 +679,65 @@ Gunakan:
 Jangan menggabungkan input user ke SQL. Gunakan prepared statement. Batasi
 identifier tabel dan kolom melalui whitelist atau validasi identifier.
 
+## Queue dan job backend
+
+Queue memakai job class di `app/Jobs` dan worker CLI di `system/console.php`.
+Job harus menggunakan namespace `App\Jobs` dan mengimplementasikan contract
+`System\Queue\Contracts\ShouldQueue`. Base class `System\Queue\Job` memberi
+property `queue`, `tries`, `backoff`, dan callback `failed()`.
+
+Contoh job:
+
+    <?php
+    namespace App\Jobs;
+
+    use System\Queue\Job;
+
+    final class SendReportJob extends Job
+    {
+        public int $tries = 5;
+        public int|array $backoff = [10, 30, 60];
+
+        public function __construct(public readonly int $reportId) {}
+
+        public function handle(): void
+        {
+            // proses report berdasarkan $this->reportId
+        }
+    }
+
+Dispatch dari controller atau service:
+
+    use App\Jobs\SendReportJob;
+    use System\Queue\Queue;
+
+    $id = Queue::dispatch(new SendReportJob($reportId));
+    Queue::dispatch(new SendReportJob($reportId), 'reports', 30);
+
+Jalankan worker dari root project:
+
+    php system/console.php queue:work
+    php system/console.php queue:work --queue=reports --sleep=5
+    php system/console.php queue:work --once
+
+Driver default adalah `file`, sehingga tidak membutuhkan service tambahan.
+Payload berada di `storage/queue` dan folder tersebut ditolak dari HTTP. Untuk
+production multi-worker, driver database dapat dipilih:
+
+    'queue' => [
+        'driver' => 'database',
+        'database' => [
+            'table' => 'jobs',
+            'failed_table' => 'failed_jobs',
+            'auto_create' => true,
+        ],
+    ],
+
+Driver database memakai koneksi PDO aplikasi dan membuat tabel queue saat
+pertama kali dipakai jika `auto_create` aktif. Job yang melewati jumlah `tries`
+atau `max_attempts` dipindahkan ke failed storage. Worker memulihkan reservation
+yang stale berdasarkan `retry_after`.
+
 ## Security baseline
 
 Baseline yang tersedia:
@@ -617,7 +756,11 @@ Baseline yang tersedia:
 - prepared statements;
 - validasi controller dan method;
 - validasi identifier CRUD;
-- blok akses HTTP ke app, system, storage, dan vendor;
+- blok akses HTTP ke app, system, storage, vendor, dan tests;
+- hanya `index.php` yang boleh diteruskan ke PHP handler;
+- file PHP di assets atau folder lain ditolak;
+- file Composer, environment, dokumentasi internal (README, CHANGELOG, AGENTS),
+  dan dot-directory ditolak; dokumentasi HTML publik tetap tersedia.
 - directory listing dimatikan;
 - flash message di-escape;
 - error production tidak membocorkan detail internal.
@@ -653,13 +796,36 @@ Production:
 
 Periksa app/Config/Config.php sebelum deploy.
 
+## Controller, model, dan DebugBar
+
+Starter ini kompatibel dengan pola model `posv1`:
+
+```php
+// model legacy: app/Models/Test.php
+$test = $this->model('Test');
+
+// model PSR-4 di app/Models/Reports/Sales.php
+$sales = $this->model('Reports\\Sales');
+```
+
+`system/run.php` mendaftarkan autoloader `App\\` untuk controller, model, job,
+dan subfolder PSR-4. Model legacy global tetap didukung oleh loader pada base
+controller, jadi migrasi dari `posv1` dapat dilakukan bertahap.
+
+Konfigurasi database berada di `app/Config/Database.php`. Pada development
+dengan PHP 8.2+, DebugBar v3 aktif sebelum controller berjalan dan memasang
+collector PDO. Setelah ada query, tab `Database` menampilkan SQL, parameter,
+durasi, dan jumlah statement. Asset dibaca dari `assets/plugins/php-debugbar/dist/`
+secara lokal tanpa CDN dan tanpa jQuery. Pada production DebugBar selalu mati.
+
 ## DebugBar
 
 Dependency DebugBar dipasang melalui Composer:
 
     composer install
 
-DebugBar hanya aktif saat env development. Asset disajikan lokal:
+DebugBar v3 hanya aktif saat env development dan PHP 8.2+. Asset dist disajikan
+lokal:
 
     assets/plugins/php-debugbar/dist/
 
@@ -667,7 +833,8 @@ Jika DebugBar tidak muncul:
 
 1. pastikan env development;
 2. pastikan vendor/autoload.php ada;
-3. pastikan debugbar.min.css dan debugbar.min.js ada;
+3. pastikan `assets/plugins/php-debugbar/dist/debugbar.min.css` dan
+   `debugbar.min.js` ada;
 4. cek CSP browser;
 5. cek response memiliki penutup body;
 6. hapus cache browser lalu reload.
@@ -676,15 +843,27 @@ DebugBar dimatikan otomatis pada production.
 
 ## Apache lokal
 
-Project mendukung .htaccess pada root, app, system, dan storage. Root .htaccess
-mengirim request yang bukan file/folder ke index.php.
+Project mendukung `.htaccess` pada root, app, system, storage, assets, dan tests.
+Root `.htaccess` mengirim request yang bukan file/folder ke `index.php`, tetapi
+menolak seluruh PHP selain front controller.
 
 Pastikan:
 
 - mod_rewrite aktif;
 - AllowOverride All aktif;
+- `apache2.conf.example` dipakai sebagai referensi VirtualHost;
 - PHP 8.4 digunakan Apache;
 - php84.local diarahkan ke 127.0.0.1 jika memakai host tersebut.
+
+Contoh setup Debian/Ubuntu:
+
+    sudo a2enmod rewrite headers
+    sudo a2ensite codekop.conf
+    sudo apachectl configtest
+    sudo systemctl reload apache2
+
+Jangan mengatur `AllowOverride None` untuk folder project, karena aturan
+penolakan `.htaccess` tidak akan dibaca.
 
 Contoh URL:
 
@@ -701,7 +880,8 @@ Gunakan nginx.conf.example sebagai template. Sesuaikan:
 - root;
 - socket PHP-FPM;
 - permission storage;
-- deny rule app, system, storage, dan vendor.
+- deny rule app, system, storage, vendor, dan tests;
+- lokasi PHP yang hanya mengizinkan `/index.php`.
 
 Validasi:
 
@@ -710,6 +890,28 @@ Validasi:
 Reload:
 
     sudo systemctl reload nginx
+
+## Security smoke test
+
+Security test harus dijalankan melalui Apache atau Nginx aktif; `php -S` tidak
+memproses `.htaccess` sehingga tidak dapat memvalidasi konfigurasi Apache.
+
+    BASE_URL=http://codekop.test bash tests/Security/security_smoke.sh
+
+Test ini memeriksa bahwa `app`, `system`, `storage`, `vendor`, `tests`, file
+Composer, `.env`, dan PHP selain `index.php` menghasilkan status `403` atau
+`404`. `index.php` tetap boleh diproses oleh PHP-FPM/Apache.
+
+## PHPUnit
+
+Test kode menggunakan PHPUnit 10.5 agar tetap kompatibel dengan PHP 8.1+ pada
+tooling test. Test unit berada di `tests/Unit`, sedangkan test akses HTTP tetap
+berada di `tests/Security` karena membutuhkan Apache atau Nginx aktif.
+
+Jalankan seluruh test:
+
+    composer test
+    vendor/bin/phpunit
 
 ## Verifikasi project
 

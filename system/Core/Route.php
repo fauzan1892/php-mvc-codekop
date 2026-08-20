@@ -11,6 +11,7 @@ final class Route
     private static array $routes = [];
     private static array $guards = [];
     private static array $middlewareStack = [];
+    private static array $prefixStack = [];
     private array $middleware = [];
 
     private function __construct(private readonly int $index) {}
@@ -48,6 +49,11 @@ final class Route
     public static function options(string $uri, string $action): self
     {
         return self::add('OPTIONS', $uri, $action, false);
+    }
+
+    public static function prefix(string $prefix): RouteGroup
+    {
+        return new RouteGroup($prefix);
     }
 
     public static function apiGet(string $uri, string $action): self
@@ -102,24 +108,31 @@ final class Route
         $middleware = $options['middleware'] ?? [];
         $middleware = is_array($middleware) ? $middleware : [$middleware];
         $previous = self::$middlewareStack;
+        $previousPrefixes = self::$prefixStack;
         self::$middlewareStack = array_values(array_unique(array_merge($previous, $middleware)));
+        $prefix = trim((string) ($options['prefix'] ?? ''), '/');
+        if ($prefix !== '') self::$prefixStack[] = $prefix;
 
         try {
             $callback();
         } finally {
             self::$middlewareStack = $previous;
+            self::$prefixStack = $previousPrefixes;
         }
     }
 
     private static function add(string $method, string $uri, string $action, bool $api): self
     {
+        $prefix = implode('/', self::$prefixStack);
+        $path = '/' . trim($prefix . '/' . trim($uri, '/'), '/');
+        $isApi = $api || $path === '/api' || str_starts_with($path, '/api/');
         self::$routes[] = [
             'method' => $method,
-            'uri' => '/' . trim($uri, '/'),
+            'uri' => $path,
             'action' => $action,
             'name' => null,
             'middleware' => self::$middlewareStack,
-            'api' => $api,
+            'api' => $isApi,
         ];
         return new self(array_key_last(self::$routes));
     }

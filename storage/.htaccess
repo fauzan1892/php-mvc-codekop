@@ -1,4 +1,5 @@
-Options -Indexes
+Options -Indexes -MultiViews
+DirectoryIndex disabled
 
 <IfModule mod_authz_core.c>
     Require all denied

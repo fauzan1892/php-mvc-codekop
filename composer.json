@@ -3,12 +3,19 @@
     "description": "Modern PHP MVC starter framework",
     "type": "project",
     "require": { "php": ">=8.2" },
-    "require-dev": { "php-debugbar/php-debugbar": "^3@dev" },
+    "require-dev": {
+        "php-debugbar/php-debugbar": "^3.0",
+        "phpunit/phpunit": "^10.5"
+    },
     "autoload": {
         "psr-4": {
             "System\\": "system/",
             "App\\": "app/"
         }
     },
-    "config": { "sort-packages": true, "allow-plugins": {} }
+    "config": { "sort-packages": true, "allow-plugins": {} },
+    "scripts": {
+        "queue:work": "@php system/console.php queue:work",
+        "test": "@php vendor/bin/phpunit"
+    }
 }

@@ -1,6 +1,11 @@
-Options -Multiviews
+Options -Indexes -MultiViews
 
-<FilesMatch "^(\.env|composer\.(json|lock)|README\.md)$">
+# Hanya front controller yang boleh dieksekusi sebagai PHP.
+<FilesMatch "^(?!index\.php$).+\.php$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(?:\.env(?:\..*)?|composer\.(?:json|lock)|README\.md|CHANGELOG\.md|AGENTS\.md|nginx\.conf\.example|apache2\.conf\.example)$">
     Require all denied
 </FilesMatch>
 
@@ -11,7 +16,9 @@ Options -Multiviews
 </IfModule>
 
 RewriteEngine On
-RewriteRule ^(?:app|system|storage|vendor)(?:/|$) - [F,L]
+RewriteRule ^(?:app|system|storage|vendor|tests)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:\.git|\.github|\.codex|\.agents)(?:/|$) - [F,L,NC]
+RewriteRule ^(?!index\.php$).*\.php(?:/|$) - [F,L,NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]

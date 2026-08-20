@@ -108,8 +108,11 @@ final class App
 
         $class = basename(str_replace('\\', '/', $controller));
         $namespacedClass = 'App\\Controllers\\' . str_replace('/', '\\', $controller);
-        $resolvedClass = class_exists($namespacedClass) ? $namespacedClass : $class;
-        if (!class_exists($resolvedClass) || !is_subclass_of($resolvedClass, Controller::class)) {
+        // Legacy controllers are global classes. Do not trigger Composer's
+        // PSR-4 lookup after the legacy file has already been loaded: the
+        // autoloader would include the same file again and redeclare the class.
+        $resolvedClass = class_exists($namespacedClass, false) ? $namespacedClass : $class;
+        if (!class_exists($resolvedClass, false) || !is_subclass_of($resolvedClass, Controller::class)) {
             $this->notFound($api); return;
         }
         try {

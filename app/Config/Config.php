@@ -20,6 +20,20 @@ $appConfig = [
         'jwt_secret' => '',
         'jwt_leeway' => 0,
     ],
+    'queue' => [
+        'driver' => 'file',
+        'default' => 'default',
+        'path' => ROOTPATH . 'storage/queue',
+        'retry_after' => 90,
+        'sleep' => 3,
+        'max_attempts' => 3,
+        'delay' => 0,
+        'database' => [
+            'table' => 'jobs',
+            'failed_table' => 'failed_jobs',
+            'auto_create' => true,
+        ],
+    ],
 ];
 
  $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';

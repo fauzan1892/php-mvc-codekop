@@ -1,0 +1,6 @@
+Options -Indexes -MultiViews
+
+# Assets are public, but uploaded or misplaced PHP must never execute here.
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>

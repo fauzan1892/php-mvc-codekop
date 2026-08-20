@@ -1,0 +1,16 @@
+# Example Apache vhost for a project without a public/ directory.
+# The root .htaccess contains the deny rules and front-controller rewrite.
+
+<VirtualHost *:80>
+    ServerName codekop.test
+    DocumentRoot /home/linuxbrew/.linuxbrew/var/www/php84/php-mvc-codekop
+
+    <Directory /home/linuxbrew/.linuxbrew/var/www/php84/php-mvc-codekop>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/codekop-error.log
+    CustomLog ${APACHE_LOG_DIR}/codekop-access.log combined
+</VirtualHost>

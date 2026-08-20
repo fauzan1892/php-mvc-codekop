@@ -3,249 +3,78 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dokumentasi Codekop PHP MVC: instalasi, Apache2, Nginx, routing, CRUD dengan AI, security, CSRF, dan RBAC.">
-    <meta name="keywords" content="PHP MVC, Codekop, boilerplate PHP, CRUD PHP, Apache2, Nginx, PHP-FPM, RBAC, CSRF">
+    <meta name="description" content="Dokumentasi Codekop PHP MVC berbasis Markdown untuk framework, backend, security, testing, dan production.">
+    <meta name="keywords" content="Codekop PHP MVC, framework PHP, queue PHP, PHPUnit, production PHP, security Apache Nginx">
     <meta name="author" content="Codekop Dev Team">
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <meta name="theme-color" content="#171717">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Codekop PHP MVC">
-    <meta property="og:title" content="Dokumentasi Codekop PHP MVC">
-    <meta property="og:description" content="Panduan framework PHP-native untuk routing, CRUD, deployment, security, AI coding workflow, dan RBAC.">
-    <meta property="og:image" content="../assets/img/codekop-logo.png">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Dokumentasi Codekop PHP MVC">
-    <meta name="twitter:description" content="Panduan framework PHP-native Codekop untuk web dan API.">
-    <title>Dokumentasi Codekop PHP MVC · Routing, CRUD, Security</title>
+    <meta name="robots" content="index, follow">
+    <title>Dokumentasi Codekop PHP MVC</title>
     <link rel="icon" href="../assets/img/codekop-logo.png">
     <link rel="stylesheet" href="../assets/retro-term/retro-term.min.css">
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "TechArticle",
-            "headline": "Dokumentasi Codekop PHP MVC",
-            "description": "Dokumentasi framework PHP-native Codekop untuk routing, CRUD, deployment, security, AI coding workflow, dan RBAC.",
-            "inLanguage": "id",
-            "author": {
-                "@type": "Organization",
-                "name": "Codekop Dev Team"
-            },
-            "isPartOf": {
-                "@type": "SoftwareSourceCode",
-                "name": "Codekop PHP MVC",
-                "codeRepository": "https://github.com/fauzan1892/php-mvc-codekop"
-            }
-        }
-    </script>
     <style>
-        :root {
-            --docs-width: 1180px;
-            --docs-code: #101827;
-            --docs-green: #9effa9;
-        }
-
+        :root { --docs-width: 1080px; --docs-code: #101827; --docs-green: #9effa9; }
         body {
-            background:
-                radial-gradient(circle at 10% 0%, rgba(99, 91, 255, .16), transparent 28rem),
-                radial-gradient(circle at 90% 10%, rgba(0, 184, 255, .12), transparent 24rem),
-                var(--rt-bg);
+            min-height: 100vh;
+            background: radial-gradient(circle at 10% 0%, rgba(99,91,255,.16), transparent 28rem),
+                radial-gradient(circle at 90% 10%, rgba(0,184,255,.12), transparent 24rem), var(--rt-bg);
         }
-
-        .docs-shell {
-            width: min(var(--docs-width), calc(100% - 2rem));
-            margin: 0 auto;
-        }
-
-        .docs-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 1.25rem 0;
-            border-bottom: 1px solid var(--rt-border);
-        }
-
-        .docs-brand {
-            display: inline-flex;
-            align-items: center;
-            gap: .75rem;
-            color: var(--rt-text);
-            font-weight: 900;
-        }
-
-        .docs-brand img {
-            width: 42px;
-            height: 42px;
-        }
-
-        .docs-layout {
-            display: grid;
-            grid-template-columns: 220px minmax(0, 1fr);
-            gap: 2.5rem;
-            padding: 3rem 0 5rem;
-        }
-
-        .docs-sidebar {
-            position: sticky;
-            top: 1rem;
-            align-self: start;
-        }
-
-        .docs-sidebar-title {
-            margin-bottom: .75rem;
-            color: var(--rt-muted);
-            font-size: .72rem;
-            font-weight: 900;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-        }
-
-        .docs-sidebar a {
-            display: block;
-            padding: .45rem .7rem;
-            border-left: 2px solid transparent;
-            color: var(--rt-muted);
-            font-size: .9rem;
-        }
-
-        .docs-sidebar a:hover {
-            border-left-color: var(--rt-primary);
-            color: var(--rt-text);
-        }
-
-        .docs-hero {
-            margin-bottom: 2.5rem;
-        }
-
-        .docs-eyebrow {
-            margin-bottom: .75rem;
-            color: var(--rt-primary-2);
-            font-size: .78rem;
-            font-weight: 900;
-            letter-spacing: .14em;
-            text-transform: uppercase;
-        }
-
-        .docs-hero h1 {
-            max-width: 780px;
-            margin-bottom: 1rem;
-        }
-
-        .docs-hero p {
-            max-width: 760px;
-            color: var(--rt-muted);
-            font-size: 1.08rem;
-        }
-
-        .docs-section {
-            margin-top: 3rem;
-            scroll-margin-top: 1.5rem;
-        }
-
-        .docs-section > h2 {
-            padding-bottom: .7rem;
-            border-bottom: 1px solid var(--rt-border);
-        }
-
-        .docs-section > h3 {
-            margin-top: 1.75rem;
-            font-size: 1.25rem;
-        }
-
-        .docs-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .docs-card {
-            padding: 1.2rem;
-            border: 1px solid var(--rt-border);
-            background: var(--rt-surface);
-        }
-
-        .docs-card h3 {
-            margin-bottom: .5rem;
-            font-size: 1rem;
-        }
-
-        .docs-card p {
-            margin: 0;
-            color: var(--rt-muted);
-            font-size: .9rem;
-        }
-
-        .docs-code {
-            margin: 1rem 0;
-            border-color: #26354f;
-            background: var(--docs-code);
-            color: var(--docs-green);
-            font-size: .88rem;
-            line-height: 1.7;
-        }
-
-        .docs-table-wrap {
-            overflow-x: auto;
-            border: 1px solid var(--rt-border);
-        }
-
-        .docs-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 560px;
-        }
-
-        .docs-table th,
-        .docs-table td {
-            padding: .75rem 1rem;
-            border-bottom: 1px solid var(--rt-border);
-            text-align: left;
-            vertical-align: top;
-        }
-
-        .docs-table th {
-            color: var(--rt-muted);
-            font-size: .75rem;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-        }
-
-        .docs-table tr:last-child td {
-            border-bottom: 0;
-        }
-
-        .docs-note {
-            margin: 1rem 0;
-            padding: 1rem 1.1rem;
-            border-left: 3px solid var(--rt-primary);
-            background: rgba(var(--rt-primary-rgb), .08);
-        }
-
-        .docs-footer {
-            padding: 2rem 0;
-            border-top: 1px solid var(--rt-border);
-            color: var(--rt-muted);
-            font-size: .85rem;
-            text-align: center;
-        }
-
-        @media (max-width: 800px) {
-            .docs-layout {
-                display: block;
-            }
-
-            .docs-sidebar {
-                position: static;
-                display: flex;
-                flex-wrap: wrap;
-                gap: .25rem .5rem;
-                margin-bottom: 2rem;
-            }
-
-            .docs-sidebar-title {
-                flex-basis: 100%;
-            }
+        .docs-shell { width: min(var(--docs-width), calc(100% - 2rem)); margin: 0 auto; }
+        .docs-layout { display:grid; grid-template-columns:220px minmax(0,1fr); gap:2rem; padding:3rem 0 5rem; }
+        .docs-sidebar { position:sticky; top:1rem; align-self:start; }
+        .docs-sidebar-title { margin-bottom:.75rem; color:var(--rt-muted); font-size:.72rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+        .docs-sidebar-links a, .docs-sidebar-sections a { display:block; padding:.45rem .7rem; border-left:2px solid transparent; color:var(--rt-muted); font-size:.9rem; }
+        .docs-mobile-nav { display:none; }
+        .docs-mobile-nav label { display:block; margin-bottom:.4rem; color:var(--rt-muted); font-size:.72rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+        .docs-mobile-nav select, .docs-sidebar-sections-select { width:100%; padding:.65rem .75rem; border:1px solid var(--rt-border); background:var(--rt-surface); color:var(--rt-text); font:inherit; }
+        .docs-sidebar-sections-select { display:none; }
+        .docs-sidebar a:hover { border-left-color:var(--rt-primary); color:var(--rt-text); }
+        .docs-sidebar-sections-title { margin-top:1.25rem; }
+        .docs-sidebar-sections a { padding-left:1.2rem; font-size:.82rem; }
+        .docs-sidebar-sections a[data-level="3"] { padding-left:1.8rem; font-size:.78rem; }
+        .docs-nav { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:1.25rem 0; border-bottom:1px solid var(--rt-border); }
+        .docs-brand { display:inline-flex; align-items:center; gap:.75rem; color:var(--rt-text); font-weight:900; }
+        .docs-brand img { width:42px; height:42px; }
+        main { min-width:0; }
+        .docs-hero { max-width:760px; margin-bottom:2rem; }
+        .docs-hero h1 { margin-bottom:1rem; font-size:clamp(2rem,5vw,3.4rem); line-height:1.1; }
+        .docs-hero p, .docs-card p, .docs-reader-status { color:var(--rt-muted); line-height:1.7; }
+        .docs-card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+        .docs-card { padding:1.25rem; border:1px solid var(--rt-border); border-radius:14px; background:var(--rt-surface); }
+        .docs-card h2 { margin-top:0; font-size:1.15rem; }
+        .docs-card p:last-child { margin-bottom:0; }
+        .docs-reader { margin-top:3rem; padding-top:2rem; border-top:1px solid var(--rt-border); scroll-margin-top:1rem; }
+        .docs-reader[hidden] { display:none; }
+        .docs-reader-toolbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+        .docs-reader-toolbar h2 { margin:0; }
+        .docs-markdown { max-width:900px; }
+        .docs-markdown h1, .docs-markdown h2, .docs-markdown h3, .docs-markdown h4 { margin-top:2rem; scroll-margin-top:1rem; }
+        .docs-markdown h1 { font-size:2rem; }
+        .docs-markdown h2 { font-size:1.5rem; }
+        .docs-markdown h3 { font-size:1.2rem; }
+        .docs-markdown p, .docs-markdown li { line-height:1.75; }
+        .docs-markdown ul, .docs-markdown ol { padding-left:1.5rem; }
+        .docs-markdown blockquote { margin:1rem 0; padding:.75rem 1rem; border-left:3px solid var(--rt-primary); color:var(--rt-muted); background:rgba(var(--rt-primary-rgb),.08); }
+        .docs-markdown pre { overflow-x:auto; padding:1rem; border:1px solid #26354f; background:var(--docs-code); color:var(--docs-green); font-size:.88rem; line-height:1.65; white-space:pre; }
+        .docs-markdown code { padding:.1rem .3rem; background:rgba(var(--rt-primary-rgb),.12); }
+        .docs-markdown pre code { padding:0; background:transparent; }
+        .docs-footer { padding:2rem 0; border-top:1px solid var(--rt-border); color:var(--rt-muted); font-size:.85rem; text-align:center; }
+        @media (max-width:560px) {
+            .docs-shell { width:min(100% - 1rem, var(--docs-width)); }
+            .docs-layout { display:block; padding-top:1.75rem; }
+            .docs-sidebar { position:sticky; top:0; z-index:10; display:block; overflow:visible; margin-bottom:1.5rem; padding:.75rem 0 1rem; background:var(--rt-bg); }
+            .docs-sidebar-title { margin:0 0 .5rem; }
+            .docs-sidebar-links { display:none; }
+            .docs-mobile-nav { display:block; width:100%; }
+            .docs-sidebar-sections-title { display:none; }
+            .docs-sidebar-sections-title:not([hidden]) { display:block; margin:.85rem 0 .45rem; }
+            .docs-sidebar-sections { display:none; }
+            .docs-sidebar-sections-select:not([hidden]) { display:block; margin-top:.5rem; }
+            .docs-nav { align-items:flex-start; padding:.85rem 0; }
+            .docs-nav > .rt-d-inline-flex { width:100%; flex-wrap:wrap; }
+            .docs-brand img { width:34px; height:34px; }
+            .docs-hero h1 { font-size:clamp(1.9rem,9vw,2.6rem); }
+            .docs-markdown h1 { font-size:1.75rem; }
+            .docs-markdown pre { font-size:.76rem; }
+            .docs-reader, .docs-markdown h1, .docs-markdown h2, .docs-markdown h3, .docs-markdown h4 { scroll-margin-top:4.75rem; }
         }
     </style>
 </head>
@@ -256,408 +85,87 @@
         <span>Codekop PHP MVC</span>
     </a>
     <div class="rt-d-inline-flex rt-gap-2">
-        <a class="rt-btn rt-btn-secondary" href="https://github.com/fauzan1892/php-mvc-codekop" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a class="rt-btn rt-btn-secondary" href="https://retro-term.codekopdev.my.id/" target="_blank" rel="noopener noreferrer">Retro-term</a>
         <a class="rt-btn rt-btn-secondary" href="../">Beranda</a>
+        <a class="rt-btn rt-btn-secondary" href="https://github.com/fauzan1892/php-mvc-codekop" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
 </header>
 
 <div class="docs-shell docs-layout">
-    <aside class="docs-sidebar" aria-label="Daftar isi">
-        <div class="docs-sidebar-title">Daftar isi</div>
-        <a href="#mulai">Mulai cepat</a>
-        <a href="#server">Apache2 &amp; Nginx</a>
-        <a href="#struktur">Struktur</a>
-        <a href="#routing">Routing</a>
-        <a href="#controller">Controller &amp; model</a>
-        <a href="#ai-crud">Tutorial CRUD dengan AI</a>
-        <a href="#request-response">Request &amp; response</a>
-        <a href="#security">Security</a>
-        <a href="#rbac">RBAC blueprint</a>
-        <a href="#konfigurasi">Konfigurasi</a>
-        <a href="#verifikasi">Verifikasi</a>
-        <a href="#tautan">Tautan project</a>
+    <aside class="docs-sidebar" aria-label="Navigasi dokumentasi">
+        <div class="docs-sidebar-title">Navigasi dokumentasi</div>
+        <nav class="docs-sidebar-links" aria-label="Daftar materi">
+            <a href="?doc=tutorials%2Fframework.md" data-doc="tutorials/framework.md">Framework, routing &amp; mulai cepat</a>
+            <a href="?doc=tutorials%2Fbackend.md" data-doc="tutorials/backend.md">Backend: queue, CRUD, RBAC</a>
+            <a href="?doc=tutorials%2Fproduction.md" data-doc="tutorials/production.md">Production, security, testing</a>
+        </nav>
+        <div class="docs-mobile-nav">
+            <label for="docs-document-select">Materi</label>
+            <select id="docs-document-select" data-doc-select aria-label="Pilih materi dokumentasi">
+                <option value="">Pilih materi dokumentasi…</option>
+                <option value="tutorials/framework.md">Framework, routing &amp; mulai cepat</option>
+                <option value="tutorials/backend.md">Backend: queue, CRUD, RBAC</option>
+                <option value="tutorials/production.md">Production, security, testing</option>
+            </select>
+        </div>
+        <div class="docs-sidebar-title docs-sidebar-sections-title" data-doc-sections-title hidden>Bagian materi</div>
+        <nav class="docs-sidebar-sections" data-doc-sections aria-label="Bagian materi yang sedang dibaca"></nav>
+        <select class="docs-sidebar-sections-select" data-doc-sections-select aria-label="Pilih bagian materi" hidden>
+            <option value="">Pilih bagian materi…</option>
+        </select>
     </aside>
 
-    <main>
-        <section class="docs-hero">
-            <div class="docs-eyebrow">Framework documentation</div>
-            <h1>Boilerplate PHP MVC yang ringan, aman, dan mudah dikembangkan.</h1>
-            <p>
-                Codekop PHP MVC adalah framework PHP-native untuk aplikasi web dan
-                API. Routing, controller, model, view, session, CSRF, CSP, dan PDO
-                tersedia tanpa framework besar.
-            </p>
-        </section>
+<main>
+    <section class="docs-hero">
+        <p class="rt-text-primary">FRAMEWORK DOCUMENTATION</p>
+        <h1>Dokumentasi Codekop PHP MVC</h1>
+        <p>
+            Index ini adalah pusat pembaca dokumentasi. Isi tutorial disimpan
+            sebagai Markdown dan dirender di halaman ini menggunakan JavaScript
+            lokal tanpa CDN.
+        </p>
+    </section>
 
-        <section class="docs-section" id="mulai">
-            <h2>Mulai cepat</h2>
-            <p>Persyaratan minimum adalah PHP 8.2+, Composer, dan database opsional.</p>
-            <pre class="docs-code"><code>composer install
-php -S 127.0.0.1:8080</code></pre>
-            <p>
-                Buka <code>/</code> untuk halaman utama atau
-                <code>/api/health</code> untuk memeriksa endpoint API.
-            </p>
-            <div class="docs-note">
-                Untuk production, ubah <code>env</code> menjadi
-                <code>production</code> pada <code>app/Config/Config.php</code>.
-            </div>
-        </section>
+    <section class="docs-card-grid" aria-label="Daftar tutorial">
+        <article class="docs-card">
+            <h2>Framework &amp; mulai cepat</h2>
+            <p>Instalasi, alur request, struktur, split route web/API ala Laravel, controller, request, response, dan konfigurasi.</p>
+            <a class="rt-link" href="?doc=tutorials%2Fframework.md" data-doc="tutorials/framework.md">Baca materi →</a>
+        </article>
+        <article class="docs-card">
+            <h2>Backend</h2>
+            <p>Queue worker, job, retry, CRUD dengan AI, workflow review, dan blueprint RBAC.</p>
+            <a class="rt-link" href="?doc=tutorials%2Fbackend.md" data-doc="tutorials/backend.md">Baca materi →</a>
+        </article>
+        <article class="docs-card">
+            <h2>Production aman</h2>
+            <p>Security baseline, Apache2, Nginx, permission, queue service, PHPUnit, smoke test, dan operasi.</p>
+            <a class="rt-link" href="?doc=tutorials%2Fproduction.md" data-doc="tutorials/production.md">Baca materi →</a>
+        </article>
+    </section>
 
-        <section class="docs-section" id="server">
-            <h2>Setup Apache2 dan Nginx</h2>
-            <p>
-                Document root harus menunjuk langsung ke root project. Semua request
-                yang bukan file atau folder fisik diarahkan ke <code>index.php</code>.
-                Sesuaikan path project, domain, dan socket PHP-FPM dengan server Anda.
-            </p>
-
-            <h3>Apache2</h3>
-            <p>Aktifkan module rewrite dan headers:</p>
-            <pre class="docs-code"><code>sudo a2enmod rewrite headers
-sudo systemctl restart apache2</code></pre>
-            <p>
-                Buat virtual host, misalnya
-                <code>/etc/apache2/sites-available/codekop.conf</code>:
-            </p>
-            <pre class="docs-code"><code>&lt;VirtualHost *:80&gt;
-    ServerName codekop.test
-    DocumentRoot /var/www/php-mvc-codekop
-
-    &lt;Directory /var/www/php-mvc-codekop&gt;
-        AllowOverride All
-        Options -Indexes
-        Require all granted
-    &lt;/Directory&gt;
-
-    ErrorLog ${APACHE_LOG_DIR}/codekop-error.log
-    CustomLog ${APACHE_LOG_DIR}/codekop-access.log combined
-&lt;/VirtualHost&gt;</code></pre>
-            <p>Aktifkan site lalu reload Apache:</p>
-            <pre class="docs-code"><code>sudo a2ensite codekop.conf
-sudo apache2ctl configtest
-sudo systemctl reload apache2</code></pre>
-            <p>
-                File <code>.htaccess</code> project sudah memblokir akses langsung
-                ke <code>app/</code>, <code>system/</code>, <code>storage/</code>, dan
-                <code>vendor/</code>. Pastikan <code>AllowOverride All</code> aktif
-                agar aturan tersebut dibaca Apache.
-            </p>
-
-            <h3>Nginx + PHP-FPM</h3>
-            <p>
-                Buat server block, misalnya
-                <code>/etc/nginx/sites-available/codekop</code>. Ganti socket
-                PHP-FPM bila versi PHP berbeda.
-            </p>
-            <pre class="docs-code"><code>server {
-    listen 80;
-    server_name codekop.test;
-    root /var/www/php-mvc-codekop;
-    index index.php;
-
-    charset utf-8;
-    client_max_body_size 10m;
-
-    location / {
-        try_files $uri $uri/ /index.php?url=$uri&amp;$query_string;
-    }
-
-    location ~ ^/(app|system|storage|vendor)/ {
-        deny all;
-        return 404;
-    }
-
-    location ~ \.php$ {
-        try_files $uri =404;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param HTTP_PROXY "";
-        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
-    }
-
-    location ~ /\. {
-        deny all;
-        return 404;
-    }
-}</code></pre>
-            <p>Aktifkan konfigurasi lalu uji dan reload Nginx:</p>
-            <pre class="docs-code"><code>sudo ln -s /etc/nginx/sites-available/codekop /etc/nginx/sites-enabled/codekop
-sudo nginx -t
-sudo systemctl reload nginx</code></pre>
-
-            <h3>Permission runtime</h3>
-            <pre class="docs-code"><code>sudo chown -R www-data:www-data /var/www/php-mvc-codekop/storage
-sudo find /var/www/php-mvc-codekop/storage -type d -exec chmod 750 {} \;
-sudo find /var/www/php-mvc-codekop/storage -type f -exec chmod 640 {} \;</code></pre>
-            <div class="docs-note">
-                Jangan memberikan permission write ke seluruh project. Hanya
-                <code>storage/</code> yang perlu dapat ditulis oleh user web server.
-                Jangan menjalankan development mode pada server publik.
-            </div>
-        </section>
-
-        <section class="docs-section" id="struktur">
-            <h2>Struktur project</h2>
-            <div class="docs-card-grid">
-                <article class="docs-card"><h3>app/</h3><p>Controller, model, middleware, view, route, dan konfigurasi aplikasi.</p></article>
-                <article class="docs-card"><h3>system/</h3><p>Kernel MVC, router, request, response, session, security, dan database.</p></article>
-                <article class="docs-card"><h3>assets/</h3><p>Asset UI lokal dan plugin development tanpa CDN.</p></article>
-                <article class="docs-card"><h3>storage/</h3><p>Runtime session dan data internal yang tidak boleh dipublikasi.</p></article>
-            </div>
-        </section>
-
-        <section class="docs-section" id="routing">
-            <h2>Routing</h2>
-            <p>Route ditulis di <code>app/Config/Routes.php</code>.</p>
-            <pre class="docs-code"><code>use System\Route;
-
-Route::get('/users/{id}', 'Users@show')->name('users.show');
-Route::post('/users', 'Users@store');
-Route::apiGet('/api/health', 'Api@health');</code></pre>
-            <h3>Parameter, group, dan resource</h3>
-            <pre class="docs-code"><code>Route::group(['middleware' => ['csrf']], static function (): void {
-    Route::post('/users', 'Users@store');
-});
-
-Route::resource('/users', 'Users');</code></pre>
-            <p>
-                Method route yang tersedia: <code>get</code>, <code>head</code>,
-                <code>post</code>, <code>put</code>, <code>patch</code>,
-                <code>delete</code>, dan <code>options</code>.
-            </p>
-        </section>
-
-        <section class="docs-section" id="controller">
-            <h2>Controller &amp; model</h2>
-            <p>Controller dapat berupa class global lama atau class namespace PSR-4.</p>
-            <pre class="docs-code"><code>&lt;?php
-namespace App\Controllers;
-
-use System\Controller;
-
-final class Users extends Controller
-{
-    public function show(string $id): array
-    {
-        return ['id' =&gt; $id];
-    }
-}</code></pre>
-            <p>Model dapat dipanggil dari controller menggunakan loader bawaan:</p>
-            <pre class="docs-code"><code>$users = $this-&gt;model('Users');
-// atau App\Models\Admin\Users
-$users = $this-&gt;model('Admin\\Users');</code></pre>
-        </section>
-
-        <section class="docs-section" id="request-response">
-            <h2>Request &amp; response</h2>
-            <div class="docs-table-wrap">
-                <table class="docs-table">
-                    <thead><tr><th>API</th><th>Fungsi</th></tr></thead>
-                    <tbody>
-                    <tr><td><code>$this-&gt;request-&gt;route('id')</code></td><td>Mengambil parameter route.</td></tr>
-                    <tr><td><code>$this-&gt;request-&gt;query('q')</code></td><td>Mengambil query string.</td></tr>
-                    <tr><td><code>$this-&gt;request-&gt;json()</code></td><td>Membaca body JSON sebagai array.</td></tr>
-                    <tr><td><code>Response::json($data)</code></td><td>Menghasilkan response JSON.</td></tr>
-                    <tr><td><code>Response::redirect('/')</code></td><td>Menghasilkan redirect tervalidasi.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section class="docs-section" id="ai-crud">
-            <h2>Tutorial CRUD dengan Codex atau Claude</h2>
-            <p>
-                Sebelum meminta AI menulis CRUD, minta AI membaca aturan project dan
-                pola kode yang sudah ada. Ini mencegah route, security, dan gaya kode
-                baru bertabrakan dengan boilerplate.
-            </p>
-
-            <h3>Urutan file yang harus dibaca</h3>
-            <div class="docs-table-wrap">
-                <table class="docs-table">
-                    <thead><tr><th>Urutan</th><th>File</th><th>Tujuan</th></tr></thead>
-                    <tbody>
-                    <tr><td>1</td><td><code>AGENTS.md</code></td><td>Aturan perubahan, security, verifikasi, dan batasan kerja agent.</td></tr>
-                    <tr><td>2</td><td><code>README.md</code></td><td>Arsitektur, alur request, konfigurasi, dan cara menjalankan project.</td></tr>
-                    <tr><td>3</td><td><code>composer.json</code></td><td>Versi PHP, autoload PSR-4, dan dependency yang boleh digunakan.</td></tr>
-                    <tr><td>4</td><td><code>app/Config/Routes.php</code></td><td>Gaya route, HTTP method, parameter, dan middleware.</td></tr>
-                    <tr><td>5</td><td>Controller, model, dan view terkait</td><td>Meniru pola lokal sebelum membuat file baru.</td></tr>
-                    <tr><td>6</td><td>Schema atau migration database</td><td>Memastikan nama tabel, kolom, index, dan relasi benar.</td></tr>
-                    <tr><td>7</td><td><code>system/Core/*</code></td><td>Hanya dibaca jika fitur memang menyentuh kernel framework.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>Workflow yang disarankan</h3>
-            <div class="docs-card-grid">
-                <article class="docs-card"><h3>1. Audit</h3><p>AI membaca aturan dan file terkait, lalu menyebutkan gap tanpa mengubah file.</p></article>
-                <article class="docs-card"><h3>2. Kontrak</h3><p>Tentukan route, field CRUD, validasi, permission, response, dan acceptance criteria.</p></article>
-                <article class="docs-card"><h3>3. Implementasi</h3><p>Tambahkan route, controller, model, view, dan migration hanya pada scope fitur.</p></article>
-                <article class="docs-card"><h3>4. Verifikasi</h3><p>Jalankan lint, test, smoke test, lalu periksa diff dan security regression.</p></article>
-            </div>
-
-            <h3>Prompt CRUD siap pakai</h3>
-            <pre class="docs-code"><code>Baca AGENTS.md, README.md, composer.json, app/Config/Routes.php,
-dan file controller/model/view yang paling mirip. Jangan mengubah file dulu.
-
-Buat CRUD untuk resource "products" dengan field:
-- name: wajib, string maksimal 150 karakter
-- price: wajib, angka >= 0
-- active: boolean
-
-Kebutuhan:
-- route GET index/create/edit/show dan POST/PUT/DELETE sesuai pola project
-- prepared statements dan validasi server-side
-- escaping semua output view
-- CSRF untuk request yang mengubah data
-- RBAC permission: products.view, products.create, products.update, products.delete
-- jangan menambahkan login atau dependency baru
-
-Sebelum selesai: tampilkan file yang akan diubah, implementasikan perubahan,
-jalankan lint/test yang relevan, lalu laporkan hasil dan risiko yang tersisa.</code></pre>
-
-            <h3>Checklist review hasil AI</h3>
-            <ul>
-                <li>Route HTTP method dan parameter sesuai kontrak.</li>
-                <li>Input divalidasi di server, output view memakai escaping.</li>
-                <li>Query memakai prepared statement; identifier tidak berasal langsung dari input.</li>
-                <li>POST, PUT, PATCH, dan DELETE dilindungi CSRF bila berbasis session.</li>
-                <li>Permission dicek di server, bukan hanya menyembunyikan tombol di UI.</li>
-                <li>Lint, test, smoke test, dan <code>git diff</code> sudah diperiksa.</li>
-            </ul>
-
-            <div class="docs-note">
-                Panduan resmi Codex tentang <code>AGENTS.md</code> tersedia di
-                <a class="rt-link" href="https://learn.chatgpt.com/docs/agent-configuration/agents-md" target="_blank" rel="noopener noreferrer">OpenAI Docs</a>.
-                Workflow ini juga dapat dipakai di Claude Code dengan aturan project
-                yang sama.
-            </div>
-        </section>
-
-        <section class="docs-section" id="security">
-            <h2>Security</h2>
-            <p>Front controller memasang security headers dan CSP secara default.</p>
-            <div class="docs-card-grid">
-                <article class="docs-card"><h3>CSP</h3><p>Script inline memakai nonce dan koneksi dibatasi ke origin sendiri.</p></article>
-                <article class="docs-card"><h3>CSRF</h3><p>Gunakan <code>csrf_field()</code> atau header <code>X-CSRF-TOKEN</code>.</p></article>
-                <article class="docs-card"><h3>PDO</h3><p>Gunakan prepared statement dan identifier tervalidasi melalui CRUD.</p></article>
-                <article class="docs-card"><h3>Session</h3><p>Session memakai strict mode, cookie HttpOnly, dan SameSite.</p></article>
-            </div>
-            <pre class="docs-code"><code>Route::group(['middleware' =&gt; ['csrf']], static function (): void {
-    Route::post('/profile', 'Profile@update');
-});</code></pre>
-        </section>
-
-        <section class="docs-section" id="rbac">
-            <h2>RBAC blueprint</h2>
-            <p>
-                Boilerplate ini tidak memaksa login atau RBAC. Jika aplikasi
-                membutuhkan otorisasi, gunakan RBAC di application layer dan
-                hubungkan ke provider user/session milik aplikasi.
-            </p>
-
-            <h3>Model data yang direkomendasikan</h3>
-            <div class="docs-table-wrap">
-                <table class="docs-table">
-                    <thead><tr><th>Tabel</th><th>Kolom utama</th><th>Fungsi</th></tr></thead>
-                    <tbody>
-                    <tr><td><code>roles</code></td><td><code>id</code>, <code>name</code>, <code>slug</code></td><td>Daftar role, misalnya admin, editor, viewer.</td></tr>
-                    <tr><td><code>permissions</code></td><td><code>id</code>, <code>name</code>, <code>slug</code></td><td>Hak terkecil, misalnya <code>products.update</code>.</td></tr>
-                    <tr><td><code>role_permissions</code></td><td><code>role_id</code>, <code>permission_id</code></td><td>Relasi banyak-ke-banyak role dan permission.</td></tr>
-                    <tr><td><code>user_roles</code></td><td><code>user_id</code>, <code>role_id</code></td><td>Role yang dimiliki user.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>Aturan permission</h3>
-            <pre class="docs-code"><code>&lt;resource&gt;.&lt;action&gt;
-
-products.view
-products.create
-products.update
-products.delete
-reports.export</code></pre>
-            <p>
-                Mulai dari permission spesifik. Hindari permission global seperti
-                <code>is_admin</code> untuk semua operasi karena sulit diaudit dan
-                terlalu luas.
-            </p>
-
-            <h3>Implementasi policy di server</h3>
-            <pre class="docs-code"><code>public function update(string $id): Response
-{
-    if (!$this-&gt;authorization-&gt;can('products.update')) {
-        return Response::json([
-            'error' =&gt; ['code' =&gt; 'forbidden'],
-        ], 403);
-    }
-
-    // validasi input, query prepared statement, lalu simpan perubahan
-}</code></pre>
-
-            <div class="docs-card-grid">
-                <article class="docs-card"><h3>Deny by default</h3><p>Permission yang belum diberikan harus ditolak.</p></article>
-                <article class="docs-card"><h3>Server-side</h3><p>Permission wajib dicek ulang pada setiap action sensitif.</p></article>
-                <article class="docs-card"><h3>Least privilege</h3><p>Berikan hanya hak yang diperlukan oleh role.</p></article>
-                <article class="docs-card"><h3>Audit</h3><p>Catat perubahan role, permission, dan action berisiko.</p></article>
-            </div>
-
-            <h3>Prompt AI untuk RBAC</h3>
-            <pre class="docs-code"><code>Baca AGENTS.md dan dokumentasi project terlebih dahulu.
-Rancang RBAC untuk resource products dengan role admin, editor, viewer.
-
-Kriteria:
-- deny by default
-- permission granular: view/create/update/delete
-- cek permission di server-side controller/service
-- jangan menganggap hidden button sebagai security
-- gunakan prepared statements dan audit perubahan permission
-- jangan membuat login baru; gunakan user/session provider aplikasi
-- tambahkan test untuk allow, deny, dan user tanpa role
-
-Tampilkan schema, file yang diubah, threat model singkat, dan hasil verifikasi.</code></pre>
-        </section>
-
-        <section class="docs-section" id="konfigurasi">
-            <h2>Konfigurasi</h2>
-            <p>Konfigurasi utama ada di <code>app/Config/Config.php</code>.</p>
-            <pre class="docs-code"><code>$appConfig = [
-    'env' =&gt; 'development',
-    'timezone' =&gt; 'Asia/Jakarta',
-    'session' =&gt; [
-        'name' =&gt; 'codekop_session',
-        'path' =&gt; ROOTPATH . 'storage/sessions',
-    ],
-];</code></pre>
-        </section>
-
-        <section class="docs-section" id="verifikasi">
-            <h2>Verifikasi</h2>
-            <pre class="docs-code"><code>composer validate --no-check-publish
-find . -path './vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l</code></pre>
-            <p>Pastikan lint, route smoke test, dan konfigurasi production berhasil sebelum deploy.</p>
-        </section>
-
-        <section class="docs-section" id="tautan">
-            <h2>Tautan project</h2>
-            <div class="docs-card-grid">
-                <article class="docs-card">
-                    <h3>Source code</h3>
-                    <p><a class="rt-link" href="https://github.com/fauzan1892/php-mvc-codekop" target="_blank" rel="noopener noreferrer">github.com/fauzan1892/php-mvc-codekop</a></p>
-                </article>
-                <article class="docs-card">
-                    <h3>Retro-term UI</h3>
-                    <p><a class="rt-link" href="https://retro-term.codekopdev.my.id/" target="_blank" rel="noopener noreferrer">retro-term.codekopdev.my.id</a></p>
-                </article>
-            </div>
-        </section>
-    </main>
+    <section class="docs-reader" id="tutorial-reader" hidden aria-live="polite">
+        <div class="docs-reader-toolbar">
+            <h2 id="tutorial-reader-title">Tutorial</h2>
+            <a class="rt-btn rt-btn-secondary" href="#" data-doc-clear>Kembali ke daftar</a>
+        </div>
+        <div class="docs-markdown" data-doc-content>
+            <p class="docs-reader-status">Pilih tutorial untuk membacanya.</p>
+        </div>
+    </section>
+</main>
 </div>
 
 <footer class="docs-shell docs-footer">
-    Codekop PHP MVC · Dokumentasi framework
+    <div>Codekop PHP MVC · Dokumentasi Markdown</div>
+    <div>
+        Support by
+        <a href="https://aiti-solutions.com/" target="_blank" rel="noopener noreferrer">AITI Solutions</a>
+        ·
+        <a href="https://www.codekop.com/" target="_blank" rel="noopener noreferrer">Codekop</a>
+        ·
+        <a href="https://github.com/fauzan1892/php-mvc-codekop" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
 </footer>
+<script src="../assets/documentation/docs.js?v=7" defer></script>
 </body>
 </html>

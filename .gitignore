@@ -3,3 +3,4 @@
 !/storage/sessions/.gitkeep
 .DS_Store
 *.log
+.phpunit.cache/

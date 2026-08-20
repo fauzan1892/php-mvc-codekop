@@ -1,0 +1,12 @@
+Options -Indexes -MultiViews
+
+# Documentation HTML is intentionally public, but PHP or backup files are not.
+<FilesMatch "\.(?:php|phar|phtml|pht|phtm|bak|old)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(?:\.env|composer\.(?:json|lock)|.*\.sql)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>

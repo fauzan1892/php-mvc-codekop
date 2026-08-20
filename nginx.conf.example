@@ -9,15 +9,8 @@ server {
     client_max_body_size 10m;
     charset utf-8;
 
-    location / {
-        try_files $uri $uri/ /index.php?url=$uri&$query_string;
-    }
-
-    location ^~ /assets/plugins/php-debugbar/dist/ {
-        try_files $uri =404;
-    }
-
-    location ~ \.php$ {
+    # Only the front controller may be passed to PHP-FPM.
+    location = /index.php {
         try_files $uri =404;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -25,13 +18,39 @@ server {
         fastcgi_pass 127.0.0.1:9000;
     }
 
-    location ~ ^/(?:app|system|storage|vendor)/ {
-        deny all;
+    # Source, dependency, session, and queue directories are never public.
+    # The ^~ prefix prevents a later regex location from handling them.
+    location = /app { return 404; }
+    location ^~ /app/ { return 404; }
+    location = /system { return 404; }
+    location ^~ /system/ { return 404; }
+    location = /storage { return 404; }
+    location ^~ /storage/ { return 404; }
+    location = /vendor { return 404; }
+    location ^~ /vendor/ { return 404; }
+    location = /tests { return 404; }
+    location ^~ /tests/ { return 404; }
+
+    location ~* ^/(?:\.git|\.github|\.codex|\.agents)(?:/|$) {
         return 404;
     }
 
-    location ~ /\. {
-        deny all;
+    location ~* ^/(?:composer\.(?:json|lock)|README\.md|CHANGELOG\.md|AGENTS\.md|nginx\.conf\.example|apache2\.conf\.example)$ {
         return 404;
+    }
+
+    location ~* \.(?:env|log|sql|sqlite|sqlite3|ini|bak|old)$ {
+        return 404;
+    }
+
+    # Any PHP URL other than the exact front controller is rejected.
+    location ~* \.php(?:/|$) { return 404; }
+
+    location ~ /\. {
+        return 404;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?url=$uri&$query_string;
     }
 }
