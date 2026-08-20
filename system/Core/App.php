@@ -21,7 +21,12 @@ final class App
                 $this->forbidden((bool) ($target[2] ?? false));
                 return;
             }
-            $this->dispatchTarget($target[0][0], $target[0][1], (bool) ($target[2] ?? false));
+            $this->dispatchTarget(
+                $target[0][0],
+                $target[0][1],
+                (bool) ($target[2] ?? false),
+                (array) ($target[3] ?? [])
+            );
             return;
         }
         if (!$active) {
@@ -59,7 +64,7 @@ final class App
             if (strtoupper($verb) !== $method) continue;
             $regex = preg_replace('/\{[A-Za-z_][A-Za-z0-9_]*\}/', '[A-Za-z0-9_-]+', $pattern);
             if ($regex !== null && preg_match('#^' . rtrim($regex, '/') . '/?$#', $path)) {
-                return $this->target((string) $target);
+                return [$this->target((string) $target), [], false, []];
             }
         }
         return null;
@@ -71,8 +76,11 @@ final class App
             [$controller, $method] = $this->target($default);
         } else {
             $segments = explode('/', $route);
-            $controller = ucfirst($segments[0] ?? '');
-            $method = $segments[1] ?? 'index';
+            $method = array_pop($segments) ?: 'index';
+            $controller = implode('/', $segments);
+            if (count($segments) === 1) {
+                $controller = ucfirst($controller);
+            }
         }
         $this->dispatchTarget($controller, $method, $this->request->wantsJson() || str_starts_with($route, 'api'));
     }
@@ -83,28 +91,41 @@ final class App
         return [$parts[0] ?? 'Home', $parts[1] ?? 'index'];
     }
 
-    private function dispatchTarget(string $controller, string $method, bool $api = false): void
+    private function dispatchTarget(
+        string $controller,
+        string $method,
+        bool $api = false,
+        array $parameters = []
+    ): void
     {
-        if (!preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $controller)
+        if (!preg_match('/^[A-Za-z][A-Za-z0-9_]*(?:\/[A-Za-z][A-Za-z0-9_]*)*$/', $controller)
             || !preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $method)) {
             $this->notFound($api); return;
         }
         $file = ROOTPATH . 'app/Controllers/' . $controller . '.php';
         if (!is_file($file)) { $this->notFound($api); return; }
         require_once $file;
-        if (!class_exists($controller) || !is_subclass_of($controller, Controller::class)) {
+
+        $class = basename(str_replace('\\', '/', $controller));
+        $namespacedClass = 'App\\Controllers\\' . str_replace('/', '\\', $controller);
+        $resolvedClass = class_exists($namespacedClass) ? $namespacedClass : $class;
+        if (!class_exists($resolvedClass) || !is_subclass_of($resolvedClass, Controller::class)) {
             $this->notFound($api); return;
         }
         try {
-            $reflection = new \ReflectionMethod($controller, $method);
+            $reflection = new \ReflectionMethod($resolvedClass, $method);
         } catch (\ReflectionException) {
             $this->notFound($api); return;
         }
         if (!$reflection->isPublic() || $reflection->isStatic() || str_starts_with($method, '__')) {
             $this->notFound($api); return;
         }
-        $object = new $controller();
-        $result = $object->$method();
+        Request::setRouteParameters($parameters);
+        $object = new $resolvedClass();
+        $arguments = $reflection->isVariadic()
+            ? array_values($parameters)
+            : array_slice(array_values($parameters), 0, $reflection->getNumberOfParameters());
+        $result = $object->$method(...$arguments);
         if ($result instanceof Response) {
             $result->send();
         } elseif ($api && is_array($result)) {

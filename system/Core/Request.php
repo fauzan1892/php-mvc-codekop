@@ -7,7 +7,13 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 final class Request
 {
+    private static array $routeParameters = [];
     private ?array $json = null;
+
+    public static function setRouteParameters(array $parameters): void
+    {
+        self::$routeParameters = $parameters;
+    }
 
     public function method(): string
     {
@@ -27,6 +33,18 @@ final class Request
     public function query(?string $key = null, mixed $default = null): mixed
     {
         return $key === null ? $_GET : ($_GET[$key] ?? $default);
+    }
+
+    public function route(?string $key = null, mixed $default = null): mixed
+    {
+        return $key === null
+            ? self::$routeParameters
+            : (self::$routeParameters[$key] ?? $default);
+    }
+
+    public function routeParameters(): array
+    {
+        return self::$routeParameters;
     }
 
     public function input(?string $key = null, mixed $default = null): mixed

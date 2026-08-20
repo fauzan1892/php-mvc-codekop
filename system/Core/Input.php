@@ -1,50 +1,52 @@
 <?php
+
 declare(strict_types=1);
+
 namespace System;
-defined('BASEPATH') OR exit('No direct script access allowed');
-/*
-  |--------------------------------------------------------------------------
-  | Input method Settings ( Get & Post )
-  |--------------------------------------------------------------------------
-  |
- */
 
-class Input {
+defined('BASEPATH') || exit('No direct script access allowed');
 
-    public function method(): string { return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET'); }
+class Input
+{
+    public function method(): string
+    {
+        return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+    }
 
-    public function isPost(): bool { return $this->method() === 'POST'; }
+    public function isPost(): bool
+    {
+        return $this->method() === 'POST';
+    }
 
-    public function post(?string $name = null, mixed $default = null): mixed {
+    public function post(?string $name = null, mixed $default = null): mixed
+    {
         return $name === null ? $_POST : ($_POST[$name] ?? $default);
     }
 
-    public function get(?string $name = null, mixed $default = null): mixed {
+    public function get(?string $name = null, mixed $default = null): mixed
+    {
         return $name === null ? $_GET : ($_GET[$name] ?? $default);
     }
 
-    public function csrf(): bool {
-        return Security::verifyCsrf($this->post('_csrf') ?? $this->post('csrf_token'));
-    }
-
-    public function getPost($name, $t = null)
+    public function csrf(): bool
     {
-        if($t == TRUE)
-        {
-            return strip_tags($_POST[''.$name.'']);
-        }else{
-            return $_POST[$name] ?? null;
+        $token = $this->post('_csrf') ?? $this->post('csrf_token');
+        if (!is_string($token) || $token === '') {
+            $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
         }
+
+        return Security::verifyCsrf(is_string($token) ? $token : null);
     }
 
-    public function getGet($name, $t = null)
+    public function getPost(string $name, bool $stripTags = false): mixed
     {
-        if($t == TRUE)
-        {
-            return strip_tags($_GET[''.$name.'']);
-        }else{
-            return $_GET[$name] ?? null;
-        }
+        $value = $_POST[$name] ?? null;
+        return $stripTags && is_string($value) ? strip_tags($value) : $value;
     }
 
+    public function getGet(string $name, bool $stripTags = false): mixed
+    {
+        $value = $_GET[$name] ?? null;
+        return $stripTags && is_string($value) ? strip_tags($value) : $value;
+    }
 }

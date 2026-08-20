@@ -28,4 +28,15 @@ final class Api extends Controller
             'data' => $this->request->json(),
         ]);
     }
+
+    public function route(): Response
+    {
+        return Response::json([
+            'success' => true,
+            'data' => [
+                'parameters' => $this->request->routeParameters(),
+                'query' => $this->request->query(),
+            ],
+        ]);
+    }
 }

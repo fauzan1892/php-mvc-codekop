@@ -4,6 +4,11 @@
     "type": "project",
     "require": { "php": ">=8.2" },
     "require-dev": { "php-debugbar/php-debugbar": "^3@dev" },
-    "autoload": { "psr-4": { "System\\": "system/" } },
+    "autoload": {
+        "psr-4": {
+            "System\\": "system/",
+            "App\\": "app/"
+        }
+    },
     "config": { "sort-packages": true, "allow-plugins": {} }
 }

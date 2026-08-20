@@ -57,6 +57,22 @@ Yang sudah tersedia:
 - contoh konfigurasi Nginx;
 - dokumentasi untuk AI agent.
 
+Fitur boilerplate tambahan:
+
+- nested controller dan model dengan namespace `App\\Controllers` serta
+  `App\\Models`;
+- route parameter bernama, misalnya `/api/route/{id}`;
+- route group dengan middleware;
+- `Route::resource()` untuk route CRUD konvensional;
+- `Request::route()` dan `Request::routeParameters()`;
+- `Response::redirect()`;
+- CSRF token dari form maupun header `X-CSRF-TOKEN`;
+- `CsrfMiddleware` opsional untuk route `POST`, `PUT`, `PATCH`, dan `DELETE`;
+- security headers tambahan untuk isolasi origin dan CSP `connect-src`.
+
+Boilerplate ini tidak memaksakan auth atau login. Middleware bersifat opsional
+dan dapat ditambahkan oleh aplikasi pemakai sesuai kebutuhan.
+
 Yang harus ditambahkan oleh aplikasi pemakai sesuai kebutuhan:
 
 - autentikasi user lengkap;
@@ -258,7 +274,24 @@ Route didefinisikan di app/Config/Routes.php:
 
     Route::get('/', 'Home@index')->name('home');
     Route::get('/home/test', 'Home@test')->name('home.test');
-    Route::post('/login', 'Auth@login');
+
+Parameter route tersedia melalui request:
+
+    Route::get('/users/{id}', 'Users@show');
+    $id = $this->request->route('id');
+
+Group middleware dan resource route:
+
+    Route::group(['middleware' => ['csrf']], static function (): void {
+        Route::post('/users', 'Users@store');
+    });
+    Route::resource('/users', 'Users');
+
+Route API contoh yang tersedia pada boilerplate:
+
+    GET  /api/health
+    POST /api/echo
+    GET  /api/route/{id}
 
 Action berikut sama-sama didukung:
 
@@ -268,23 +301,25 @@ Action berikut sama-sama didukung:
 HTTP method yang tersedia:
 
     Route::get()
+    Route::head()
     Route::post()
     Route::put()
     Route::patch()
     Route::delete()
+    Route::options()
 
 Parameter URI sederhana:
 
     Route::get('/users/{id}', 'User@show');
 
-Parameter digunakan untuk pencocokan route. Pengambilan parameter controller
-dapat dikembangkan sesuai kebutuhan aplikasi.
+Parameter diteruskan sesuai urutan ke action controller dan juga tersedia
+melalui `Request::route()`.
 
 ## Mode routes active
 
 Di app/Config/Routes.php:
 
-    $routes['active'] = TRUE;
+    $routes['active'] = true;
 
 Jika active TRUE:
 
