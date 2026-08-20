@@ -3,10 +3,40 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dokumentasi Codekop PHP MVC boilerplate framework.">
-    <title>Documentation · Codekop PHP MVC</title>
+    <meta name="description" content="Dokumentasi Codekop PHP MVC: instalasi, Apache2, Nginx, routing, CRUD dengan AI, security, CSRF, dan RBAC.">
+    <meta name="keywords" content="PHP MVC, Codekop, boilerplate PHP, CRUD PHP, Apache2, Nginx, PHP-FPM, RBAC, CSRF">
+    <meta name="author" content="Codekop Dev Team">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#171717">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Codekop PHP MVC">
+    <meta property="og:title" content="Dokumentasi Codekop PHP MVC">
+    <meta property="og:description" content="Panduan framework PHP-native untuk routing, CRUD, deployment, security, AI coding workflow, dan RBAC.">
+    <meta property="og:image" content="../assets/img/codekop-logo.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Dokumentasi Codekop PHP MVC">
+    <meta name="twitter:description" content="Panduan framework PHP-native Codekop untuk web dan API.">
+    <title>Dokumentasi Codekop PHP MVC · Routing, CRUD, Security</title>
     <link rel="icon" href="../assets/img/codekop-logo.png">
     <link rel="stylesheet" href="../assets/retro-term/retro-term.min.css">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "headline": "Dokumentasi Codekop PHP MVC",
+            "description": "Dokumentasi framework PHP-native Codekop untuk routing, CRUD, deployment, security, AI coding workflow, dan RBAC.",
+            "inLanguage": "id",
+            "author": {
+                "@type": "Organization",
+                "name": "Codekop Dev Team"
+            },
+            "isPartOf": {
+                "@type": "SoftwareSourceCode",
+                "name": "Codekop PHP MVC",
+                "codeRepository": "https://github.com/fauzan1892/php-mvc-codekop"
+            }
+        }
+    </script>
     <style>
         :root {
             --docs-width: 1180px;
@@ -236,6 +266,7 @@
     <aside class="docs-sidebar" aria-label="Daftar isi">
         <div class="docs-sidebar-title">Daftar isi</div>
         <a href="#mulai">Mulai cepat</a>
+        <a href="#server">Apache2 &amp; Nginx</a>
         <a href="#struktur">Struktur</a>
         <a href="#routing">Routing</a>
         <a href="#controller">Controller &amp; model</a>
@@ -271,6 +302,99 @@ php -S 127.0.0.1:8080</code></pre>
             <div class="docs-note">
                 Untuk production, ubah <code>env</code> menjadi
                 <code>production</code> pada <code>app/Config/Config.php</code>.
+            </div>
+        </section>
+
+        <section class="docs-section" id="server">
+            <h2>Setup Apache2 dan Nginx</h2>
+            <p>
+                Document root harus menunjuk langsung ke root project. Semua request
+                yang bukan file atau folder fisik diarahkan ke <code>index.php</code>.
+                Sesuaikan path project, domain, dan socket PHP-FPM dengan server Anda.
+            </p>
+
+            <h3>Apache2</h3>
+            <p>Aktifkan module rewrite dan headers:</p>
+            <pre class="docs-code"><code>sudo a2enmod rewrite headers
+sudo systemctl restart apache2</code></pre>
+            <p>
+                Buat virtual host, misalnya
+                <code>/etc/apache2/sites-available/codekop.conf</code>:
+            </p>
+            <pre class="docs-code"><code>&lt;VirtualHost *:80&gt;
+    ServerName codekop.test
+    DocumentRoot /var/www/php-mvc-codekop
+
+    &lt;Directory /var/www/php-mvc-codekop&gt;
+        AllowOverride All
+        Options -Indexes
+        Require all granted
+    &lt;/Directory&gt;
+
+    ErrorLog ${APACHE_LOG_DIR}/codekop-error.log
+    CustomLog ${APACHE_LOG_DIR}/codekop-access.log combined
+&lt;/VirtualHost&gt;</code></pre>
+            <p>Aktifkan site lalu reload Apache:</p>
+            <pre class="docs-code"><code>sudo a2ensite codekop.conf
+sudo apache2ctl configtest
+sudo systemctl reload apache2</code></pre>
+            <p>
+                File <code>.htaccess</code> project sudah memblokir akses langsung
+                ke <code>app/</code>, <code>system/</code>, <code>storage/</code>, dan
+                <code>vendor/</code>. Pastikan <code>AllowOverride All</code> aktif
+                agar aturan tersebut dibaca Apache.
+            </p>
+
+            <h3>Nginx + PHP-FPM</h3>
+            <p>
+                Buat server block, misalnya
+                <code>/etc/nginx/sites-available/codekop</code>. Ganti socket
+                PHP-FPM bila versi PHP berbeda.
+            </p>
+            <pre class="docs-code"><code>server {
+    listen 80;
+    server_name codekop.test;
+    root /var/www/php-mvc-codekop;
+    index index.php;
+
+    charset utf-8;
+    client_max_body_size 10m;
+
+    location / {
+        try_files $uri $uri/ /index.php?url=$uri&amp;$query_string;
+    }
+
+    location ~ ^/(app|system|storage|vendor)/ {
+        deny all;
+        return 404;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTP_PROXY "";
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+    }
+
+    location ~ /\. {
+        deny all;
+        return 404;
+    }
+}</code></pre>
+            <p>Aktifkan konfigurasi lalu uji dan reload Nginx:</p>
+            <pre class="docs-code"><code>sudo ln -s /etc/nginx/sites-available/codekop /etc/nginx/sites-enabled/codekop
+sudo nginx -t
+sudo systemctl reload nginx</code></pre>
+
+            <h3>Permission runtime</h3>
+            <pre class="docs-code"><code>sudo chown -R www-data:www-data /var/www/php-mvc-codekop/storage
+sudo find /var/www/php-mvc-codekop/storage -type d -exec chmod 750 {} \;
+sudo find /var/www/php-mvc-codekop/storage -type f -exec chmod 640 {} \;</code></pre>
+            <div class="docs-note">
+                Jangan memberikan permission write ke seluruh project. Hanya
+                <code>storage/</code> yang perlu dapat ditulis oleh user web server.
+                Jangan menjalankan development mode pada server publik.
             </div>
         </section>
 

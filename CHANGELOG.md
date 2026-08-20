@@ -10,6 +10,8 @@ Semua perubahan penting pada project ini dicatat di file ini.
 - Dokumentasi HTML statis pada `/documentation/`.
 - Tutorial CRUD dengan Codex/Claude, urutan file yang perlu dibaca, prompt
   implementasi, checklist review AI, dan blueprint RBAC.
+- Panduan deployment Apache2, Nginx + PHP-FPM, rewrite, dan permission runtime.
+- SEO on-page untuk dokumentasi: metadata, Open Graph, Twitter Card, dan JSON-LD.
 - Dukungan route parameter bernama, seperti `/api/route/{id}`.
 - Dukungan nested controller dan model dengan namespace `App\\Controllers` dan
   `App\\Models`.
