@@ -8,6 +8,8 @@ Semua perubahan penting pada project ini dicatat di file ini.
 
 - Logo Codekop baru pada `assets/img/codekop-logo.png`.
 - Dokumentasi HTML statis pada `/documentation/`.
+- Tutorial CRUD dengan Codex/Claude, urutan file yang perlu dibaca, prompt
+  implementasi, checklist review AI, dan blueprint RBAC.
 - Dukungan route parameter bernama, seperti `/api/route/{id}`.
 - Dukungan nested controller dan model dengan namespace `App\\Controllers` dan
   `App\\Models`.

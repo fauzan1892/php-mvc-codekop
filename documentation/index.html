@@ -225,7 +225,11 @@
         <img src="../assets/img/codekop-logo.png" alt="Codekop MVC">
         <span>Codekop PHP MVC</span>
     </a>
-    <a class="rt-btn rt-btn-secondary" href="../">Beranda</a>
+    <div class="rt-d-inline-flex rt-gap-2">
+        <a class="rt-btn rt-btn-secondary" href="https://github.com/fauzan1892/php-mvc-codekop" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="rt-btn rt-btn-secondary" href="https://retro-term.codekopdev.my.id/" target="_blank" rel="noopener noreferrer">Retro-term</a>
+        <a class="rt-btn rt-btn-secondary" href="../">Beranda</a>
+    </div>
 </header>
 
 <div class="docs-shell docs-layout">
@@ -235,10 +239,13 @@
         <a href="#struktur">Struktur</a>
         <a href="#routing">Routing</a>
         <a href="#controller">Controller &amp; model</a>
+        <a href="#ai-crud">Tutorial CRUD dengan AI</a>
         <a href="#request-response">Request &amp; response</a>
         <a href="#security">Security</a>
+        <a href="#rbac">RBAC blueprint</a>
         <a href="#konfigurasi">Konfigurasi</a>
         <a href="#verifikasi">Verifikasi</a>
+        <a href="#tautan">Tautan project</a>
     </aside>
 
     <main>
@@ -335,6 +342,76 @@ $users = $this-&gt;model('Admin\\Users');</code></pre>
             </div>
         </section>
 
+        <section class="docs-section" id="ai-crud">
+            <h2>Tutorial CRUD dengan Codex atau Claude</h2>
+            <p>
+                Sebelum meminta AI menulis CRUD, minta AI membaca aturan project dan
+                pola kode yang sudah ada. Ini mencegah route, security, dan gaya kode
+                baru bertabrakan dengan boilerplate.
+            </p>
+
+            <h3>Urutan file yang harus dibaca</h3>
+            <div class="docs-table-wrap">
+                <table class="docs-table">
+                    <thead><tr><th>Urutan</th><th>File</th><th>Tujuan</th></tr></thead>
+                    <tbody>
+                    <tr><td>1</td><td><code>AGENTS.md</code></td><td>Aturan perubahan, security, verifikasi, dan batasan kerja agent.</td></tr>
+                    <tr><td>2</td><td><code>README.md</code></td><td>Arsitektur, alur request, konfigurasi, dan cara menjalankan project.</td></tr>
+                    <tr><td>3</td><td><code>composer.json</code></td><td>Versi PHP, autoload PSR-4, dan dependency yang boleh digunakan.</td></tr>
+                    <tr><td>4</td><td><code>app/Config/Routes.php</code></td><td>Gaya route, HTTP method, parameter, dan middleware.</td></tr>
+                    <tr><td>5</td><td>Controller, model, dan view terkait</td><td>Meniru pola lokal sebelum membuat file baru.</td></tr>
+                    <tr><td>6</td><td>Schema atau migration database</td><td>Memastikan nama tabel, kolom, index, dan relasi benar.</td></tr>
+                    <tr><td>7</td><td><code>system/Core/*</code></td><td>Hanya dibaca jika fitur memang menyentuh kernel framework.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Workflow yang disarankan</h3>
+            <div class="docs-card-grid">
+                <article class="docs-card"><h3>1. Audit</h3><p>AI membaca aturan dan file terkait, lalu menyebutkan gap tanpa mengubah file.</p></article>
+                <article class="docs-card"><h3>2. Kontrak</h3><p>Tentukan route, field CRUD, validasi, permission, response, dan acceptance criteria.</p></article>
+                <article class="docs-card"><h3>3. Implementasi</h3><p>Tambahkan route, controller, model, view, dan migration hanya pada scope fitur.</p></article>
+                <article class="docs-card"><h3>4. Verifikasi</h3><p>Jalankan lint, test, smoke test, lalu periksa diff dan security regression.</p></article>
+            </div>
+
+            <h3>Prompt CRUD siap pakai</h3>
+            <pre class="docs-code"><code>Baca AGENTS.md, README.md, composer.json, app/Config/Routes.php,
+dan file controller/model/view yang paling mirip. Jangan mengubah file dulu.
+
+Buat CRUD untuk resource "products" dengan field:
+- name: wajib, string maksimal 150 karakter
+- price: wajib, angka >= 0
+- active: boolean
+
+Kebutuhan:
+- route GET index/create/edit/show dan POST/PUT/DELETE sesuai pola project
+- prepared statements dan validasi server-side
+- escaping semua output view
+- CSRF untuk request yang mengubah data
+- RBAC permission: products.view, products.create, products.update, products.delete
+- jangan menambahkan login atau dependency baru
+
+Sebelum selesai: tampilkan file yang akan diubah, implementasikan perubahan,
+jalankan lint/test yang relevan, lalu laporkan hasil dan risiko yang tersisa.</code></pre>
+
+            <h3>Checklist review hasil AI</h3>
+            <ul>
+                <li>Route HTTP method dan parameter sesuai kontrak.</li>
+                <li>Input divalidasi di server, output view memakai escaping.</li>
+                <li>Query memakai prepared statement; identifier tidak berasal langsung dari input.</li>
+                <li>POST, PUT, PATCH, dan DELETE dilindungi CSRF bila berbasis session.</li>
+                <li>Permission dicek di server, bukan hanya menyembunyikan tombol di UI.</li>
+                <li>Lint, test, smoke test, dan <code>git diff</code> sudah diperiksa.</li>
+            </ul>
+
+            <div class="docs-note">
+                Panduan resmi Codex tentang <code>AGENTS.md</code> tersedia di
+                <a class="rt-link" href="https://learn.chatgpt.com/docs/agent-configuration/agents-md" target="_blank" rel="noopener noreferrer">OpenAI Docs</a>.
+                Workflow ini juga dapat dipakai di Claude Code dengan aturan project
+                yang sama.
+            </div>
+        </section>
+
         <section class="docs-section" id="security">
             <h2>Security</h2>
             <p>Front controller memasang security headers dan CSP secara default.</p>
@@ -347,6 +424,76 @@ $users = $this-&gt;model('Admin\\Users');</code></pre>
             <pre class="docs-code"><code>Route::group(['middleware' =&gt; ['csrf']], static function (): void {
     Route::post('/profile', 'Profile@update');
 });</code></pre>
+        </section>
+
+        <section class="docs-section" id="rbac">
+            <h2>RBAC blueprint</h2>
+            <p>
+                Boilerplate ini tidak memaksa login atau RBAC. Jika aplikasi
+                membutuhkan otorisasi, gunakan RBAC di application layer dan
+                hubungkan ke provider user/session milik aplikasi.
+            </p>
+
+            <h3>Model data yang direkomendasikan</h3>
+            <div class="docs-table-wrap">
+                <table class="docs-table">
+                    <thead><tr><th>Tabel</th><th>Kolom utama</th><th>Fungsi</th></tr></thead>
+                    <tbody>
+                    <tr><td><code>roles</code></td><td><code>id</code>, <code>name</code>, <code>slug</code></td><td>Daftar role, misalnya admin, editor, viewer.</td></tr>
+                    <tr><td><code>permissions</code></td><td><code>id</code>, <code>name</code>, <code>slug</code></td><td>Hak terkecil, misalnya <code>products.update</code>.</td></tr>
+                    <tr><td><code>role_permissions</code></td><td><code>role_id</code>, <code>permission_id</code></td><td>Relasi banyak-ke-banyak role dan permission.</td></tr>
+                    <tr><td><code>user_roles</code></td><td><code>user_id</code>, <code>role_id</code></td><td>Role yang dimiliki user.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Aturan permission</h3>
+            <pre class="docs-code"><code>&lt;resource&gt;.&lt;action&gt;
+
+products.view
+products.create
+products.update
+products.delete
+reports.export</code></pre>
+            <p>
+                Mulai dari permission spesifik. Hindari permission global seperti
+                <code>is_admin</code> untuk semua operasi karena sulit diaudit dan
+                terlalu luas.
+            </p>
+
+            <h3>Implementasi policy di server</h3>
+            <pre class="docs-code"><code>public function update(string $id): Response
+{
+    if (!$this-&gt;authorization-&gt;can('products.update')) {
+        return Response::json([
+            'error' =&gt; ['code' =&gt; 'forbidden'],
+        ], 403);
+    }
+
+    // validasi input, query prepared statement, lalu simpan perubahan
+}</code></pre>
+
+            <div class="docs-card-grid">
+                <article class="docs-card"><h3>Deny by default</h3><p>Permission yang belum diberikan harus ditolak.</p></article>
+                <article class="docs-card"><h3>Server-side</h3><p>Permission wajib dicek ulang pada setiap action sensitif.</p></article>
+                <article class="docs-card"><h3>Least privilege</h3><p>Berikan hanya hak yang diperlukan oleh role.</p></article>
+                <article class="docs-card"><h3>Audit</h3><p>Catat perubahan role, permission, dan action berisiko.</p></article>
+            </div>
+
+            <h3>Prompt AI untuk RBAC</h3>
+            <pre class="docs-code"><code>Baca AGENTS.md dan dokumentasi project terlebih dahulu.
+Rancang RBAC untuk resource products dengan role admin, editor, viewer.
+
+Kriteria:
+- deny by default
+- permission granular: view/create/update/delete
+- cek permission di server-side controller/service
+- jangan menganggap hidden button sebagai security
+- gunakan prepared statements dan audit perubahan permission
+- jangan membuat login baru; gunakan user/session provider aplikasi
+- tambahkan test untuk allow, deny, dan user tanpa role
+
+Tampilkan schema, file yang diubah, threat model singkat, dan hasil verifikasi.</code></pre>
         </section>
 
         <section class="docs-section" id="konfigurasi">
@@ -367,6 +514,20 @@ $users = $this-&gt;model('Admin\\Users');</code></pre>
             <pre class="docs-code"><code>composer validate --no-check-publish
 find . -path './vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l</code></pre>
             <p>Pastikan lint, route smoke test, dan konfigurasi production berhasil sebelum deploy.</p>
+        </section>
+
+        <section class="docs-section" id="tautan">
+            <h2>Tautan project</h2>
+            <div class="docs-card-grid">
+                <article class="docs-card">
+                    <h3>Source code</h3>
+                    <p><a class="rt-link" href="https://github.com/fauzan1892/php-mvc-codekop" target="_blank" rel="noopener noreferrer">github.com/fauzan1892/php-mvc-codekop</a></p>
+                </article>
+                <article class="docs-card">
+                    <h3>Retro-term UI</h3>
+                    <p><a class="rt-link" href="https://retro-term.codekopdev.my.id/" target="_blank" rel="noopener noreferrer">retro-term.codekopdev.my.id</a></p>
+                </article>
+            </div>
         </section>
     </main>
 </div>
