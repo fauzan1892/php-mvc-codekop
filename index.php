@@ -40,10 +40,10 @@ if (!headers_sent()) {
     header('Cross-Origin-Resource-Policy: same-origin');
     header('X-Permitted-Cross-Domain-Policies: none');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
-    $developmentStyleAttributes = (defined('APP_ENV') && APP_ENV === 'development')
-        ? "; style-src-attr 'unsafe-inline'"
-        : '';
-    header("Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; object-src 'none'; img-src 'self' data:; style-src 'self' 'nonce-" . CSP_NONCE . "'" . $developmentStyleAttributes . "; script-src 'self' 'nonce-" . CSP_NONCE . "'; connect-src 'self'");
+    // Retro-term mengatur beberapa widget secara dinamis melalui element.style.
+    // Izinkan style attribute saja; inline script tetap wajib memakai nonce.
+    $styleAttributePolicy = "; style-src-attr 'unsafe-inline'";
+    header("Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; object-src 'none'; img-src 'self' data:; style-src 'self' 'nonce-" . CSP_NONCE . "'" . $styleAttributePolicy . "; script-src 'self' 'nonce-" . CSP_NONCE . "'; connect-src 'self'");
     if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
         header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
     }
