@@ -1,0 +1,15 @@
+.git
+.github
+.gitignore
+.dockerignore
+vendor/
+.phpunit.cache/
+tests/
+storage/sessions/*
+!storage/sessions/.gitkeep
+!storage/sessions/.htaccess
+storage/queue/pending/*
+storage/queue/processing/*
+storage/queue/failed/*
+*.log
+.DS_Store
